@@ -1,0 +1,56 @@
+#include "MessageHandler.h"
+#include "../task/task_clientPacket.h"
+#include "packet.h"
+#include "LogManager.h"
+
+SINGLETON_DEFINE(MessageHandler)
+
+MessageHandler::MessageHandler(){};
+
+bool MessageHandler::init()
+{
+	return true;
+}
+
+ActionResult MessageHandler::processMessage(void * paramMessage)
+{
+	task_clientConnPacket * pConnMsg = (task_clientConnPacket *)paramMessage;
+	if (pConnMsg == NULL || pConnMsg->data_packet == NULL) {
+		TRACEERROR("(pConnMsg == NULL || pConnMsg->data_packet == NULL)");
+		return RESULT_PARSEERROR;
+	}
+
+	Packet * pPacket = Packet::NewPacketFromBytes(pConnMsg->data_packet, pConnMsg->data_size);
+	if (pPacket == NULL) {
+		TRACEERROR("NewPacketFromBytes failed session_id:%ld", pConnMsg->session_id);
+		return RESULT_PARSEERROR;
+	}
+
+	MessageHandlerMap::iterator it_action = m_mapFun.find(pPacket->operatecode);
+	if (it_action == m_mapFun.end()) {
+		TRACEWARN("cannot find messageid :%d from session:%ld", pPacket->operatecode, pConnMsg->session_id);
+		return RESULT_UNKNOWNMESSAGE;
+	}
+
+	if (it_action->second == NULL) {
+		m_mapFun.erase(it_action);
+		TRACEWARN("messagefun is NULL :%d", pPacket->operatecode);
+		return RESULT_UNKNOWNMESSAGE;
+	}
+
+	Action * action = it_action->second;
+
+	ActionResult result = action->processMessage(pPacket, pConnMsg->session_id);
+
+	//如果是异步等待中，则不删除
+	if (result != RESULT_ASYNC_WAIT) {
+		ORYX_DEL(pPacket);
+	}
+
+	if (result != RESULT_SUCCESS && result != RESULT_ASYNC_WAIT) {
+		TRACEERROR("processMessage failed:%d,messageid :%d from session:%ld", result, pPacket->operatecode, pConnMsg->session_id);
+	}
+
+	return result;
+}
+

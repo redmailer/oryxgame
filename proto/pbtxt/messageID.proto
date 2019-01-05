@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package Proto;
+
+enum MESSAGE_ID {
+
+	MSGID_HEART_BEAT = 0;		//心跳
+
+	MSGID_LOGIN_C					= 101;		//客户端请求登录
+	MSGID_LOGIN_S					= 102;		//客户端请求登录 - 返回
+	MSGID_LOGOFF_C					= 103;		//客户端请求下线
+	MSGID_LOGOFF_S					= 104;		//客户端请求下线 - 返回
+
+	MSGID_FORCE_QUIT_NTF			= 105;		//强制下线通知
+
+};
+
+enum RESULT_ID {
+	RESULT_SUCCESS					= 0;				//成功
+
+	RESULT_LOGIN_NOEXIST			= 101;		//登录：帐号不存在或者密码错误
+	RESULT_LOGIN_REPEATED			= 102;		//登录：不能重复登录
+	RESULT_LOGOFF_OTHERPLACE		= 103;		//强制下线：已在其他设备登录
+	RESULT_LOGOFF_SEALOFF			= 104;		//强制下线：帐号封停
+
+}

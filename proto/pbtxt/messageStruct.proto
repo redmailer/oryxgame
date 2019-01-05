@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package Proto;
+
+message stHeartBeat_C{
+	int32 timenow = 1;
+}
+
+message stHeartBeat_S{
+	int32 timenow = 1;
+}
+
+message stLogin_C{
+	string username = 1;
+	string password = 2;
+}
+
+message stLogin_S{
+	int64 player_id = 1;
+}
+
