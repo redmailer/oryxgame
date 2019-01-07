@@ -94,7 +94,7 @@ void ServerHandler::run()
 		INT32 threadNums = ThreadManager::getInstance()->update();
 
 		if (threadNums <= 0 && timerNums <= 0) {
-			usleep(2000);
+			usleep(10000);
 		}
 		else {
 			//cout << "---mainhandler tasks:" << nums << " at time :" << GetCourrentTime() << endl;

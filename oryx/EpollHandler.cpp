@@ -30,7 +30,7 @@ void * EpollHandler::epoll_thread_run(void * param)
 		eventNums += epollHandler->update_thread();
 
 		if (eventNums <= 0) {
-			usleep(2000);
+			usleep(10000);
 		}
 		else {
 			//cout << "+++epollthread " << epollHandler->getThreadID() << " events num :" << eventNums << " at time:" << GetCourrentTime() << endl;
