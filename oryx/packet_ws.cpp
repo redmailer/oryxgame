@@ -50,22 +50,28 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
         }
     }
 
-    if (strcmp(websocketKey.c_str(),"") == 0 ){
+    if (websocketKey.size() == 0 ){
         return false;
     }
 
     response = "HTTP/1.1 101 Switching Protocols\r\n";
     response += "Upgrade: websocket\r\n";
     response += "Connection: upgrade\r\n";
-    response += "Sec-WebSocket-Accept: 12345678901234567890";
-    //const std::string magicKey("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
+    response += "Sec-WebSocket-Accept: ";
 
-    // websocketKey += magicKey;
-    // SHA1 sha;
-	// unsigned int message_digest[5];
-	// sha.Reset();
-	// sha << server_key.c_str();
 
+    websocketKey += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    SHA1 sha;
+	unsigned int message_digest[5];
+	sha.Reset();
+	sha << websocketKey.c_str();
+    sha.Result(message_digest);
+	for (int i = 0; i < 5; i++) 
+	{
+		message_digest[i] = htonl(message_digest[i]);
+	}
+    server_key = base64_encode(reinterpret_cast<const unsigned char*>(message_digest),20);
+	response += server_key;
 
 
     // std::string serverKey = websocketKey + magicKey;
