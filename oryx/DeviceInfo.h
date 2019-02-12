@@ -98,14 +98,14 @@ struct DEVICE_INFO {
 			return 0;
 		}
 		clear_Send_buff();
-		if (MAX_SEND_BUFFER_LEN - this->send_end < size + (INT32)sizeof(INT32)) {
+		if (MAX_SEND_BUFFER_LEN - this->send_end < size ) {
 			TRACEEPOLL(LOG_LEVEL_WARN, "session %ld write failed,data too long", session_id);
 			return 0;
 		}
 
-		INT32 onlineSize = htonl(size + (INT32)sizeof(INT32));
-		memcpy(send_buffer + send_end, &onlineSize, sizeof(onlineSize));
-		send_end += sizeof(onlineSize);
+		// INT32 onlineSize = htonl(size + (INT32)sizeof(INT32));
+		// memcpy(send_buffer + send_end, &onlineSize, sizeof(onlineSize));
+		// send_end += sizeof(onlineSize);
 		memcpy(send_buffer + send_end, data, size);
 		send_end += size;
 
