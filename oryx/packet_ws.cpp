@@ -10,7 +10,7 @@ using namespace std;
 bool WSTool::TestWSHandShake(const char * data){
     TRACEEPOLL(LOG_LEVEL_INFO,"TestWSHandShake:%s", data);
     if(strncmp(data,"GET",3) != 0){
-        return false
+        return false;
     }
     std::istringstream s(buff_);
     std::getline(s, request);
