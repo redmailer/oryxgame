@@ -207,11 +207,18 @@ void Packet::CheckLen(INT32 len)
 	this->data = buff;
 }
 
+void Packet::setMessageIdx(UINT32 idx)
+{
+	this.message_idx = idx;
+	this.write(this.message_idx, OFFSET_MESSIDX);
+}
+
 void Packet::Init()
 {
 	this->message_len = PACKET_HEAD_LEN;
 	this->errorcode = 0;
 	this->operatecode = 0;
+	this->message_idx = 0;
 	this->version = PACKET_VERSION;
 	this->dataMaxLen = 0;
 	this->dataNowLen = 0;

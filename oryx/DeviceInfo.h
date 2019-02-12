@@ -8,12 +8,18 @@
 using namespace std;
 
 enum DEVICE_TYPE {
-	DEVICE_UNKNOWN = 0,				//未知服务器
-	DEVICE_SERVER_INTERNAL = 1,		//内部服务器
-	DEVICE_SERVER_EXTERNAL = 2,		//外部服务器
-	DEVICE_CLIENT_INTERNAL = 3,		//内部连接设备
-	DEVICE_CLIENT_EXTERNAL = 4,		//外部连接设备
+	DEVICE_UNKNOWN = 0,				//未知锟斤拷锟斤拷锟斤拷
+	DEVICE_SERVER_INTERNAL = 1,		//锟节诧拷锟斤拷锟斤拷锟斤拷
+	DEVICE_SERVER_EXTERNAL = 2,		//锟解部锟斤拷锟斤拷锟斤拷
+	DEVICE_CLIENT_INTERNAL = 3,		//锟节诧拷锟斤拷锟斤拷锟借备
+	DEVICE_CLIENT_EXTERNAL = 4,		//锟解部锟斤拷锟斤拷锟借备
 };
+
+enum PROTO_TYPE {
+	PROTO_NONE = 0;
+	PROTO_ORYX = 1;
+	PROTO_WEBSOCKET = 2;
+}
 
 const INT32 MAX_RECV_BUFFER_LEN = 4096;
 const INT32 MAX_SEND_BUFFER_LEN = 4096;
@@ -23,21 +29,27 @@ const INT32 MAX_SEND_BUFFER_LEN = 4096;
 struct DEVICE_INFO {
 	INT32 fd;
 	INT64 session_id;
-	DEVICE_TYPE  device_type;			//设备类型
+	DEVICE_TYPE  device_type;			//锟借备锟斤拷锟斤拷
 	char recv_buffer[MAX_RECV_BUFFER_LEN];
 	INT32 recv_begin;
 	INT32 recv_end;
+	UINT32 recv_idx;
 	char send_buffer[MAX_SEND_BUFFER_LEN];
 	INT32 send_begin;
 	INT32 send_end;
+	UINT32 send_idx;
+	PROTO_TYPE  proto_type;
 	struct sockaddr_in sock_addr;
 
 	DEVICE_INFO(DEVICE_TYPE deviceType = DEVICE_UNKNOWN) {
 		device_type = deviceType;
 		recv_begin = 0;
 		recv_end = 0;
+		recv_idx = 0;
 		send_begin = 0;
 		send_end = 0;
+		send_idx = 0;
+		proto_type = PROTO_NONE;
 	}
 
 	inline void clear_Recv_buff() {

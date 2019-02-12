@@ -5,12 +5,13 @@
 
 #define PACKET_VERSION 1
 
-#define PACKET_HEAD_LEN 14
+#define PACKET_HEAD_LEN 18
 
 #define OFFSET_MESSLEN 0
 #define OFFSET_VERSION 4
 #define OFFSET_OPERCODE 6
 #define OFFSET_ERRCODE 10
+#define OFFSET_MESSIDX 14
 
 #define PACKET_MIN_SIZE 256
 
@@ -54,14 +55,17 @@ private:
 	void Init();
 
 public:
+	void setMessageIdx(UINT32 idx);
+
 	INT32 message_len;
 	INT32 version;
 	INT32 operatecode;
 	INT32 errorcode;
+	UINT32 message_idx;
 	byte*  data;
 
-	INT32 dataMaxLen;		//»º³åÇø´óÐ¡
-	INT32 dataNowLen;		//µ±Ç°Ê¹ÓÃµÄ»º³åÇø´óÐ¡
+	INT32 dataMaxLen;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+	INT32 dataNowLen;		//ï¿½ï¿½Ç°Ê¹ï¿½ÃµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
 
 };
 
