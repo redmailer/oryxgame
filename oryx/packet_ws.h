@@ -11,7 +11,7 @@ public:
 
 class WSTool {
 public:
-    static bool TestWSHandShake(const char * data);
+    static bool TestWSHandShake(const char * request, std::string & response);
 };
 
 #endif
