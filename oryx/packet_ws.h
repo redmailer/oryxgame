@@ -2,6 +2,7 @@
 #define __PACKET_WS__
 
 #include "common.h"
+#include <string>
 
 using namespace std;
 
