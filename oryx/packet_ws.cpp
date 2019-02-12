@@ -8,6 +8,6 @@
 using namespace std;
 
 bool WSTool::TestWSHandShake(const char * data){
-    TRACEEPOLL("TestWSHandShake:%s", data);
+    TRACEEPOLL(LOG_LEVEL_INFO,"TestWSHandShake:%s", data);
     return false;
 }
