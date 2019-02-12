@@ -12,7 +12,7 @@ bool WSTool::TestWSHandShake(const char * data){
     if(strncmp(data,"GET",3) != 0){
         return false;
     }
-    std::istringstream s(buff_);
+    std::istringstream s(data);
     std::getline(s, request);
     if (request[request.size()-1] == '\r') {
         request.erase(request.end()-1);
