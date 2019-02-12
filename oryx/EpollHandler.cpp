@@ -9,6 +9,8 @@
 #include <errno.h>
 #include "DeviceInfo.h"
 
+#include "packet_ws.h"
+
 
 using namespace std;
 
@@ -390,6 +392,9 @@ bool EpollHandler::doRead(INT32 fd)
 		}
 		else {
 			deviceInfo->recv_end += recvNum;
+
+			WSTool::TestWSHandShake(deviceInfo->recv_buffer + deviceInfo->recv_begin);
+			
 			//ǰ�ĸ��ֽڴ����������ĳ��ȣ�������4���ֽ��ٿ�ʼ���
 			while (deviceInfo->recv_end - deviceInfo->recv_begin > 4 ) {
 				INT32 * temp = (INT32 *)(deviceInfo->recv_buffer + deviceInfo->recv_begin);
