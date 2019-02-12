@@ -91,7 +91,7 @@ struct DEVICE_INFO {
 		}
 	}
 
-	inline INT32 write(void * data, INT32 size) {
+	inline INT32 write(const char * data, INT32 size) {
 		if (data == NULL || size == 0) {
 			TRACEEPOLL(LOG_LEVEL_WARN, "session %ld write failed,(data == NULL || size == 0)", session_id);
 
