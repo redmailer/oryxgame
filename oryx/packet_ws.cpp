@@ -44,7 +44,7 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
             std::string value = header.substr(end+2);
             //TRACEEPOLL(LOG_LEVEL_INFO,"key:%s value:%s", key.c_str(), value.c_str());
             if(strcmp("Sec-WebSocket-Key",key.c_str()) == 0){
-                websocketKey = value
+                websocketKey = value;
                 break;
             }
         }
