@@ -70,8 +70,8 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
 	{
 		message_digest[i] = htonl(message_digest[i]);
 	}
-    server_key = base64_encode(reinterpret_cast<const unsigned char*>(message_digest),20);
-	response += server_key;
+    websocketKey = base64_encode(reinterpret_cast<const unsigned char*>(message_digest),20);
+	response += websocketKey;
 
 
     // std::string serverKey = websocketKey + magicKey;
