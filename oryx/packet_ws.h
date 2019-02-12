@@ -10,6 +10,7 @@ public:
 
 
 class WSTool {
+public:
     static bool TestWSHandShake(const char * data);
 };
 
