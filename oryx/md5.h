@@ -3,7 +3,7 @@
 
 #include <string>
 #include <fstream>
-#include "comon.h"
+#include "common.h"
 
 using std::string;
 using std::ifstream;
