@@ -56,7 +56,7 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
 
     response = "HTTP/1.1 101 Switching Protocols\r\n";
     response += "Upgrade: websocket\r\n";
-    response += "Connection: upgrade\r\n";
+    response += "Connection: Upgrade\r\n";
     response += "Sec-WebSocket-Accept: ";
 
 
@@ -71,7 +71,7 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
 		message_digest[i] = htonl(message_digest[i]);
 	}
     websocketKey = base64_encode(reinterpret_cast<const unsigned char*>(message_digest),20);
-	response += websocketKey;
+	response += websocketKey + "\r\n\r\n";
 
 
     // std::string serverKey = websocketKey + magicKey;
