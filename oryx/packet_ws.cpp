@@ -37,7 +37,7 @@ bool WSTool::TestWSHandShake(const char * data){
         if (end != std::string::npos) {
             std::string key = header.substr(0,end);
             std::string value = header.substr(end+2);
-            TRACEEPOLL(LOG_LEVEL_INFO,"ket:%s value:%s", key, value);
+            TRACEEPOLL(LOG_LEVEL_INFO,"ket:%s value:%s", key.c_str(), value.c_str());
         }
     }
 
