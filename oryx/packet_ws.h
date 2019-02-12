@@ -12,3 +12,5 @@ public:
 class WSTool {
     static bool TestWSHandShake(const char * data);
 }
+
+#endif
