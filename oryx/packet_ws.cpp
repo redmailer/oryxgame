@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include "LogManager.h"
+#include<sstream>
 
 using namespace std;
 
@@ -13,6 +14,8 @@ bool WSTool::TestWSHandShake(const char * data){
         return false;
     }
     std::istringstream s(data);
+    std::string request;
+
     std::getline(s, request);
     if (request[request.size()-1] == '\r') {
         request.erase(request.end()-1);
