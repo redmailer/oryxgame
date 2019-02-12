@@ -18,11 +18,11 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
         return false;
     }
     std::istringstream s(request);
-    std::string request;
+    std::string tmp;
 
-    std::getline(s, request);
-    if (request[request.size()-1] == '\r') {
-        request.erase(request.end()-1);
+    std::getline(s, tmp);
+    if (tmp[tmp.size()-1] == '\r') {
+        tmp.erase(tmp.end()-1);
     } else {
         return false;
     }
