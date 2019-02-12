@@ -84,6 +84,6 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
     // serverKey = base64::base64_encode(std::string(shaHash)) + "\r\n\r\n";
     // string strtmp(serverKey.c_str());
     // response += strtmp;
-    TRACEEPOLL(LOG_LEVEL_INFO,"response:%s", response.c_str());
+    TRACEEPOLL(LOG_LEVEL_INFO,"response:%s, size:%d", response.c_str(),response.size());
     return true;
 }
