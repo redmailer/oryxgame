@@ -396,7 +396,7 @@ bool EpollHandler::doRead(INT32 fd)
 				std::string request;
 				if(WSTool::TestWSHandShake(deviceInfo->recv_buffer + deviceInfo->recv_begin, request)){
 					deviceInfo->proto_type = PROTO_WEBSOCKET;
-					deviceInfo->recv_begin = deviceInfo.recv_end;
+					deviceInfo->recv_begin = deviceInfo->recv_end;
 					deviceInfo->write(request.c_str(), request.size());
 					result = doWrite(deviceInfo->fd);
 					TRACEEPOLL(LOG_LEVEL_ERROR,"session:%ld set prototype:PROTO_WEBSOCKET",deviceInfo->session_id);
