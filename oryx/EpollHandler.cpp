@@ -486,7 +486,7 @@ bool EpollHandler::doWrite(INT32 fd)
 			result = false;
 			break;
 		}
-		TRACEEPOLL(LOG_LEVEL_INFO, "send to %ld  len:%ld  at thread:%ld", deviceInfo->session_id, sendLen, getThreadID());
+		TRACEEPOLL(LOG_LEVEL_INFO, "send to %ld  len:%d  at thread:%ld", deviceInfo->session_id, sendLen, getThreadID());
 		deviceInfo->send_begin += sendLen;
 
 	} while (result);
