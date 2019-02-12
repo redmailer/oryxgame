@@ -209,8 +209,8 @@ void Packet::CheckLen(INT32 len)
 
 void Packet::setMessageIdx(UINT32 idx)
 {
-	this.message_idx = idx;
-	this.write(this.message_idx, OFFSET_MESSIDX);
+	this->message_idx = idx;
+	this->write(this.message_idx, OFFSET_MESSIDX);
 }
 
 void Packet::Init()
