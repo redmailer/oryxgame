@@ -504,7 +504,7 @@ bool EpollHandler::analysePacket(INT32 fd){
 				// pPacket->InitData(wsp->payLoadData , wsp->payLoadLength );
 				// push_task_main(pPacket);
 
-				// deviceInfo->recv_begin += wsp->wspacket_len;
+				deviceInfo->recv_begin += wsp->wspacket_len;
 				TRACEEPOLL(LOG_LEVEL_INFO, "ws test info:%s",wsp->payLoadData);
 				delete wsp;
 			}
