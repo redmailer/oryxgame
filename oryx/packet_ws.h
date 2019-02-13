@@ -12,11 +12,11 @@ enum WS_FrameType
 	WS_TEXT_FRAME = 0x01,
 	WS_BINARY_FRAME = 0x02,
 
-    WS_CLOSING_FRAME = 0x08
+    WS_CLOSING_FRAME = 0x08,
 
 	WS_PING_FRAME = 0x09,
 	WS_PONG_FRAME = 0x0A,
-}
+};
 
 using namespace std;
 
