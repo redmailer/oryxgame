@@ -29,7 +29,7 @@ private:
 public:
     ~PacketWS();
 
-    init();
+    void init();
 
     void fetchFin(INT32 &len);
     void fetchOpcode(INT32 &len);
