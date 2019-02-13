@@ -18,34 +18,34 @@ PacketWS* PacketWS::DecodeWsPacket(const char * data, INT32 len, INT32& error){
         return NULL;
     }
     PacketWS* wsp = new PacketWS();
-    this->wspacket_data = new char[len];
-    this->wspacket_len = len;
-    memcpy(this->wspacket_data, data, len);
+    wsp->wspacket_data = new char[len];
+    wsp->wspacket_len = len;
+    memcpy(wsp->wspacket_data, data, len);
     INT32 readLen = 0;
-    this->fetchFin(readLen);
-    this->fetchOpcode(readLen);
-    this->fetchMask(readLen);
-    this->fetchPayLoadLen(readLen);
+    wsp->fetchFin(readLen);
+    wsp->fetchOpcode(readLen);
+    wsp->fetchMask(readLen);
+    wsp->fetchPayLoadLen(readLen);
 
-    if(this->payLoadLength < 0){
+    if(wsp->payLoadLength < 0){
         error = -1;
         delete wsp;
         return NULL;
     }
 
-    INT32 checkLen = readLen + this->payLoadLength ;
-    if(this->mask == 1){
-        checkLen += sizeof(this->masking_key);
+    INT32 checkLen = readLen + wsp->payLoadLength ;
+    if(wsp->mask == 1){
+        checkLen += sizeof(wsp->masking_key);
     }
 
     if(checkLen > len){
         delete wsp;
         return NULL;
     }
-    this->wspacket_len = checkLen;
+    wsp->wspacket_len = checkLen;
 
-    this->fetchMaskingKey(readLen);
-    this->fetchPayLoadData(readLen);
+    wsp->fetchMaskingKey(readLen);
+    wsp->fetchPayLoadData(readLen);
     return wsp;
 }
 
