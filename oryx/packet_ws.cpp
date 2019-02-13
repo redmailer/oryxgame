@@ -107,9 +107,11 @@ void PacketWS::fetchPayLoadData(INT32 &len){
         delete[] this->payLoadData;
         this->payLoadData = NULL;
     }
-    this->payLoadData = new char[this->payLoadLength];
+    this->payLoadData = new char[this->payLoadLength + 1];
+    memset(this->payLoadData, 0 , this->payLoadLength + 1);
     memcpy(this->payLoadData, this->wspacket_data+len , this->payLoadLength);
     len += this->payLoadLength;
+    this->decodeLoadData();
 }
 
 void PacketWS::decodeLoadData(){
