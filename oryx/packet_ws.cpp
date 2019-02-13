@@ -7,10 +7,133 @@
 #include <sstream>
 
 #include "sha1.h"
-#include "md5.h"
 #include "base64.h"
 
 using namespace std;
+
+
+PacketWS* PacketWS::DecodeWsPacket(const char * data, INT32 len, INT32& error){
+    error = 0;
+    if(len < 2){
+        return NULL;
+    }
+    PacketWS* wsp = new PacketWS();
+    this->wspacket_data = new char[len];
+    this->wspacket_len = len;
+    memcpy(this->wspacket_data, data, len);
+    INT32 readLen = 0;
+    this->fetchFin(readLen);
+    this->fetchOpcode(readLen);
+    this->fetchMask(readLen);
+    this->fetchPayLoadLen(readLen);
+
+    if(this->payLoadLength < 0){
+        error = -1;
+        delete wsp;
+        return NULL;
+    }
+
+    INT32 checkLen = readLen + this->payLoadLength ;
+    if(this->mask == 1){
+        checkLen += sizeof(this->masking_key);
+    }
+
+    if(checkLen > len){
+        delete wsp;
+        return NULL;
+    }
+    this->wspacket_len = checkLen;
+
+    this->fetchMaskingKey(readLen);
+    this->fetchPayLoadData(readLen);
+    return wsp;
+}
+
+PacketWS::PacketWS(){
+    this->init();
+}
+
+PacketWS::~PacketWS(){
+    if(this->wspacket_data){
+        delete[] this->wspacket_data;
+        this->wspacket_data = NULL;
+    }
+    if(this->payLoadData){
+        delete[] this->payLoadData;
+        this->payLoadData = NULL;
+    }
+}
+
+PacketWS::fetchFin(INT32 &len){
+    this->fin = this->wspacket_data[len] >> 7;
+}
+
+PacketWS::fetchOpcode(INT32 &len){
+    this->opcode = this->wspacket_data[len] & 0x0f;
+    len += 1;
+}
+
+PacketWS::fetchMask(INT32 &len){
+    this->mask = this->wspacket_data[len] >> 7;
+}
+
+PacketWS::fetchPayLoadLen(INT32 &len){
+    this->payLoadLength = this->wspacket_data[len] & 7f;
+    len += 1;
+    if(this->payLoadLength == 126){
+        UINT16 * length = this->wspacket_data+len;
+        this->payLoadLength = ntohs(*length);
+        len += 1;
+    }else if (this->payLoadLength == 127){
+        //不解析，数据量过大
+        this->payLoadLength = -1;
+        return
+    }
+}
+
+PacketWS::fetchMaskingKey(INT32 &len){
+    if(this->mask != 1){
+        return;
+    }
+    memcpy(this->masking_key, this->wspacket_data+len, sizeof(this->masking_key));
+    len += sizeof(this->masking_key);
+}
+
+PacketWS::fetchPayLoadData(INT32 &len){
+    if(this->payLoadLength <= 0){
+        return;
+    }
+    if(this->payLoadData){
+        delete[] this->payLoadData;
+        this->payLoadData = NULL;
+    }
+    this->payLoadData = new char[this->payLoadLength];
+    memcpy(this->payLoadData, this->wspacket_data+len , this->payLoadLength);
+    len += this->payLoadLength;
+}
+
+PacketWS::decodeLoadData(){
+    if(this->mask != 1){
+        return;
+    }
+    for(int i = 0 ; i < this->payLoadLength; i++){
+        this->payLoadData[i] = this->masking_key[i % 4] ^ this->payLoadData[i];
+    }
+}
+
+void PacketWS::init(){
+    this->isLegal = false;
+    
+    this->fin = 0;
+    this->opcode = 0;
+    this->mask = 0;
+    this->payLoadLength = 0;
+    memset(this->masking_key, 0 ,sizeof(this->masking_key)) ;
+    this->payLoadData = NULL;
+
+    this->wspacket_len = 0;
+    this->wspacket_data = NULL;
+}
 
 bool WSTool::TestWSHandShake(const char * request, std::string & response){
     //TRACEEPOLL(LOG_LEVEL_INFO,"TestWSHandShake:%s", data);
@@ -72,18 +195,6 @@ bool WSTool::TestWSHandShake(const char * request, std::string & response){
 	}
     websocketKey = base64_encode(reinterpret_cast<const unsigned char*>(message_digest),20);
 	response += websocketKey + "\r\n\r\n";
-
-
-    // std::string serverKey = websocketKey + magicKey;
-
-
-
-    // char shaHash[32];
-    // memset(shaHash, 0, sizeof(shaHash));
-    // sha1::calc(serverKey.c_str(), serverKey.size(), (unsigned char *) shaHash);
-    // serverKey = base64::base64_encode(std::string(shaHash)) + "\r\n\r\n";
-    // string strtmp(serverKey.c_str());
-    // response += strtmp;
-    TRACEEPOLL(LOG_LEVEL_INFO,"response:%s, size:%d", response.c_str(),response.size());
+    //TRACEEPOLL(LOG_LEVEL_INFO,"response:%s, size:%d", response.c_str(),response.size());
     return true;
 }

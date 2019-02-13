@@ -395,9 +395,9 @@ bool EpollHandler::doRead(INT32 fd)
 			if (deviceInfo->proto_type == PROTO_NONE){
 				std::string request;
 				if(WSTool::TestWSHandShake(deviceInfo->recv_buffer + deviceInfo->recv_begin, request)){
+					deviceInfo->write(request.c_str(), request.size());
 					deviceInfo->proto_type = PROTO_WEBSOCKET;
 					deviceInfo->recv_begin = deviceInfo->recv_end;
-					deviceInfo->write(request.c_str(), request.size());
 					result = doWrite(deviceInfo->fd);
 					TRACEEPOLL(LOG_LEVEL_ERROR,"session:%ld set prototype:PROTO_WEBSOCKET",deviceInfo->session_id);
 					break;
@@ -407,34 +407,19 @@ bool EpollHandler::doRead(INT32 fd)
 				}
 			}
 
-			//ǰ�ĸ��ֽڴ����������ĳ��ȣ�������4���ֽ��ٿ�ʼ���
-			while (deviceInfo->recv_end - deviceInfo->recv_begin > 4 ) {
-				INT32 * temp = (INT32 *)(deviceInfo->recv_buffer + deviceInfo->recv_begin);
-				INT32 packetLen = ntohl(*temp);
-
-				//��̫�� ���� ���ȴ��󣬲����ˣ�ֱ�ӶϿ�
-				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen < 4) {
-					TRACEEPOLL(LOG_LEVEL_ERROR, "session:%ld-----doRead-----packetLen:%d illegal", deviceInfo->session_id, packetLen);
-					result = false;
-					break;
-				}
-
-				//һ����û�������������������
-				if (packetLen > deviceInfo->recv_end - deviceInfo->recv_begin) {
-					break;
-				}
-
-				//�չ�һ������ֱ�ӽ�������
-				//Packet* packet = Packet::NewPacket(deviceInfo->recv_buffer + deviceInfo->recv_begin, packetLen);
-				task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
-				pPacket->InitData(deviceInfo->recv_buffer + deviceInfo->recv_begin , packetLen );
-				push_task_main(pPacket);
-
-				deviceInfo->recv_begin += packetLen;
-			}
+			result = this->analysePacket(deviceInfo->fd);
 		}
 
 	} while (result);
+
+	//判断缓冲区满
+	if(result){
+		deviceInfo->clear_Recv_buff();
+		if (deviceInfo->recv_end - deviceInfo->recv_begin >= MAX_RECV_BUFFER_LEN){
+			result = false;
+			TRACEEPOLL(LOG_LEVEL_ERROR,"session:%ld recv buff full",deviceInfo->session_id);
+		}
+	}
 
 	return result;
 }
@@ -445,7 +430,6 @@ bool EpollHandler::doWrite(INT32 fd)
 	if (deviceInfo == NULL) {
 		return false;
 	}
-	TRACEEPOLL(LOG_LEVEL_INFO,"send info:%d %d",deviceInfo->send_begin, deviceInfo->send_end);
 	if (deviceInfo->send_end <= deviceInfo->send_begin) {
 		return true;
 	}
@@ -492,5 +476,69 @@ bool EpollHandler::doWrite(INT32 fd)
 	} while (result);
 
 	return result;
+}
+
+bool EpollHandler::analysePacket(INT32 fd){
+	DEVICE_INFO * deviceInfo = GetDeviceInfo_ByFD(fd);
+	if (deviceInfo == NULL) {
+		return false;
+	}
+	if (deviceInfo->send_end <= deviceInfo->send_begin) {
+		return true;
+	}
+
+	bool result = true;
+
+	switch(deviceInfo->proto_type){
+		case PROTO_WEBSOCKET:{
+			while (deviceInfo->recv_end - deviceInfo->recv_begin >= 2){
+				INT32 errcode = 0;
+				PacketWS* wsp = PacketWS::DecodeWsPacket(deviceInfo->recv_buffer + deviceInfo->recv_begin, deviceInfo->recv_end - deviceInfo->recv_begin, errcode);
+				if(errcode != 0){
+					return false;
+				}
+				if (wsp == NULL){
+					return true;
+				}
+
+				//�չ�һ������ֱ�ӽ�������
+				// task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
+				// pPacket->InitData(wsp->payLoadData , wsp->payLoadLength );
+				// push_task_main(pPacket);
+
+				// deviceInfo->recv_begin += wsp->wspacket_len;
+				TRACEEPOLL(LOG_LEVEL_INFO, "ws test info:%s",wsp->payLoadData);
+				delete wsp;
+			}
+		}
+		break;
+
+		default :
+			//ǰ�ĸ��ֽڴ����������ĳ��ȣ�������4���ֽ��ٿ�ʼ���
+			while (deviceInfo->recv_end - deviceInfo->recv_begin > 4 ) {
+				INT32 * temp = (INT32 *)(deviceInfo->recv_buffer + deviceInfo->recv_begin);
+				INT32 packetLen = ntohl(*temp);
+
+				//��̫�� ���� ���ȴ��󣬲����ˣ�ֱ�ӶϿ�
+				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen < 4) {
+					TRACEEPOLL(LOG_LEVEL_ERROR, "session:%ld-----doRead-----packetLen:%d illegal", deviceInfo->session_id, packetLen);
+					return false;
+				}
+
+				//һ����û�������������������
+				if (packetLen > deviceInfo->recv_end - deviceInfo->recv_begin) {
+					break;
+				}
+
+				//�չ�һ������ֱ�ӽ�������
+				task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket, getThreadID(), deviceInfo->session_id);
+				pPacket->InitData(deviceInfo->recv_buffer + deviceInfo->recv_begin , packetLen );
+				push_task_main(pPacket);
+
+				deviceInfo->recv_begin += packetLen;
+		}
+		break;
+	}
+	return true;
 }
 

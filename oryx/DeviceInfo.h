@@ -98,20 +98,25 @@ struct DEVICE_INFO {
 			return 0;
 		}
 		clear_Send_buff();
-		if (MAX_SEND_BUFFER_LEN - this->send_end < size ) {
-			TRACEEPOLL(LOG_LEVEL_WARN, "session %ld write failed,data too long", session_id);
-			return 0;
+		
+		switch(this.proto_type){
+			case PROTO_WEBSOCKET:{
+				
+			}
+			break;
+
+			default: {
+				if (MAX_SEND_BUFFER_LEN - this->send_end < size ) {
+					TRACEEPOLL(LOG_LEVEL_WARN, "session %ld write failed,data too long", session_id);
+					return 0;
+				}
+				memcpy(send_buffer + send_end, data, size);
+				send_end += size;
+			}
+			break;
 		}
-
-		// INT32 onlineSize = htonl(size + (INT32)sizeof(INT32));
-		// memcpy(send_buffer + send_end, &onlineSize, sizeof(onlineSize));
-		// send_end += sizeof(onlineSize);
-		memcpy(send_buffer + send_end, data, size);
-		send_end += size;
-
-		//return size + sizeof(INT32);
+		
 		return size;
-
 	}
 
 	static inline DEVICE_TYPE getClientDeviceType(DEVICE_TYPE deviceType) {

@@ -14,7 +14,7 @@
 #include "thread.h"
 #include "DeviceInfo.h"
 
-const INT32 MAXEVENTS = 4096;                //Ã¿´ÎÑ­»·×î´óÊÂ¼þÊý
+const INT32 MAXEVENTS = 4096;                //Ã¿ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½
 
 typedef std::unordered_map<INT32, DEVICE_INFO *>	DEVICE_INFO_MAP;
 typedef std::unordered_map<INT64, DEVICE_INFO *>	DEVICE_SESSION_INFO_MAP;
@@ -28,7 +28,7 @@ public:
 	INT32 epfd;
 
 private:
-	struct epoll_event events_slot[MAXEVENTS];    //¼àÌýÊÂ¼þÊý×é
+	struct epoll_event events_slot[MAXEVENTS];    //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	DEVICE_INFO_MAP m_MapDeviceInfo;
 	DEVICE_SESSION_INFO_MAP m_MapDeviceSessionInfo;
@@ -60,6 +60,8 @@ public:
 	bool doAccept(INT32 fd);
 	bool doRead(INT32 fd);
 	bool doWrite(INT32 fd);
+
+	bool analysePacket(INT32 fd);
 
 	inline INT32 GetDeviceNum() { return m_MapDeviceInfo.size(); }
 

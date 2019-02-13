@@ -18,8 +18,8 @@ typedef unsigned short uint16, UINT16;
 typedef int int32, INT32;
 typedef unsigned int uint32, UINT32;
 
-typedef long int64, INT64;
-typedef unsigned long uint64, UINT64;
+typedef long long int64, INT64;
+typedef unsigned long long uint64, UINT64;
 
 typedef char byte, BYTE;
 
@@ -104,6 +104,8 @@ inline void printMemery(byte* data, INT32 len) {
 inline INT64 GetCourrentTime() {
 	return (INT64)time(NULL);
 }
+
+
 
 
 #endif
