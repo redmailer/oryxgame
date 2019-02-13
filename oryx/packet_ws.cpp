@@ -78,10 +78,10 @@ void PacketWS::fetchMask(INT32 &len){
 }
 
 void PacketWS::fetchPayLoadLen(INT32 &len){
-    this->payLoadLength = this->wspacket_data[len] & 7f;
+    this->payLoadLength = this->wspacket_data[len] & 0x7f;
     len += 1;
     if(this->payLoadLength == 126){
-        UINT16 * length = this->wspacket_data+len;
+        UINT16 * length = (UINT16 *)(this->wspacket_data + len);
         this->payLoadLength = ntohs(*length);
         len += 1;
     }else if (this->payLoadLength == 127){
