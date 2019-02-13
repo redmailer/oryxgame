@@ -87,7 +87,7 @@ void PacketWS::fetchPayLoadLen(INT32 &len){
     }else if (this->payLoadLength == 127){
         //不解析，数据量过大
         this->payLoadLength = -1;
-        return
+        return;
     }
 }
 
