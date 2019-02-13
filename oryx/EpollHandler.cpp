@@ -483,7 +483,7 @@ bool EpollHandler::analysePacket(INT32 fd){
 	if (deviceInfo == NULL) {
 		return false;
 	}
-	if (deviceInfo->send_end <= deviceInfo->send_begin) {
+	if (deviceInfo->recv_end <= deviceInfo->recv_begin) {
 		return true;
 	}
 
