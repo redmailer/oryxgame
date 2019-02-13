@@ -64,20 +64,20 @@ PacketWS::~PacketWS(){
     }
 }
 
-PacketWS::fetchFin(INT32 &len){
+void PacketWS::fetchFin(INT32 &len){
     this->fin = this->wspacket_data[len] >> 7;
 }
 
-PacketWS::fetchOpcode(INT32 &len){
+void PacketWS::fetchOpcode(INT32 &len){
     this->opcode = this->wspacket_data[len] & 0x0f;
     len += 1;
 }
 
-PacketWS::fetchMask(INT32 &len){
+void PacketWS::fetchMask(INT32 &len){
     this->mask = this->wspacket_data[len] >> 7;
 }
 
-PacketWS::fetchPayLoadLen(INT32 &len){
+void PacketWS::fetchPayLoadLen(INT32 &len){
     this->payLoadLength = this->wspacket_data[len] & 7f;
     len += 1;
     if(this->payLoadLength == 126){
@@ -91,7 +91,7 @@ PacketWS::fetchPayLoadLen(INT32 &len){
     }
 }
 
-PacketWS::fetchMaskingKey(INT32 &len){
+void PacketWS::fetchMaskingKey(INT32 &len){
     if(this->mask != 1){
         return;
     }
@@ -99,7 +99,7 @@ PacketWS::fetchMaskingKey(INT32 &len){
     len += sizeof(this->masking_key);
 }
 
-PacketWS::fetchPayLoadData(INT32 &len){
+void PacketWS::fetchPayLoadData(INT32 &len){
     if(this->payLoadLength <= 0){
         return;
     }
@@ -112,7 +112,7 @@ PacketWS::fetchPayLoadData(INT32 &len){
     len += this->payLoadLength;
 }
 
-PacketWS::decodeLoadData(){
+void PacketWS::decodeLoadData(){
     if(this->mask != 1){
         return;
     }
