@@ -487,8 +487,6 @@ bool EpollHandler::analysePacket(INT32 fd){
 		return true;
 	}
 
-	bool result = true;
-
 	switch(deviceInfo->proto_type){
 		case PROTO_WEBSOCKET:{
 			while (deviceInfo->recv_end - deviceInfo->recv_begin >= 2){
