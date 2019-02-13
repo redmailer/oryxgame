@@ -121,9 +121,7 @@ void PacketWS::decodeLoadData(){
     }
 }
 
-void PacketWS::init(){
-    this->isLegal = false;
-    
+void PacketWS::init(){    
     this->fin = 0;
     this->opcode = 0;
     this->mask = 0;
