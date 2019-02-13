@@ -99,7 +99,7 @@ struct DEVICE_INFO {
 		}
 		clear_Send_buff();
 		
-		switch(this.proto_type){
+		switch(this->proto_type){
 			case PROTO_WEBSOCKET:{
 				
 			}
