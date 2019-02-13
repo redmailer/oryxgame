@@ -65,7 +65,7 @@ PacketWS::~PacketWS(){
 }
 
 void PacketWS::fetchFin(INT32 &len){
-    this->fin = this->wspacket_data[len] >> 7;
+    this->fin = (unsigned char)this->wspacket_data[len] >> 7;
 }
 
 void PacketWS::fetchOpcode(INT32 &len){
@@ -74,7 +74,7 @@ void PacketWS::fetchOpcode(INT32 &len){
 }
 
 void PacketWS::fetchMask(INT32 &len){
-    this->mask = this->wspacket_data[len] >> 7;
+    this->mask = (unsigned char)this->wspacket_data[len] >> 7;
 }
 
 void PacketWS::fetchPayLoadLen(INT32 &len){
