@@ -5,12 +5,12 @@
 #include <unordered_map>
 #include "Player.h"
 
-class ClientConnManager {
+class ConfigManager {
 
-    SINGLETON_DECLEAR(ClientConnManager)
+    SINGLETON_DECLEAR(ConfigManager)
 
 public:
-    virtual ~ClientConnManager() {};
+    virtual ~ConfigManager() {};
 
 	virtual bool init();
 
