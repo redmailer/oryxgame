@@ -31,7 +31,13 @@ bool ConfigManager::loadServerConfig() {
     {  
         return false;
     } 
-    std::string server_name = root["server_name"].asString();  // 访问节点，upload_id = "UP000000" 
-    cout << "test server_name" << server_name << endl;
-    return false;
+    this->server_name = root["server_name"].asString();
+    this->listen_addr = root["listen_addr"].asString();
+    this->listen_port = root["listen_port"].asInt();
+    this->io_thread_num = root["io_thread_num"].asInt();
+    TRACEINFO("server_name:%d",server_name);
+    TRACEINFO("listen_addr:%d",listen_addr);
+    TRACEINFO("listen_port:%d",listen_port);
+    TRACEINFO("io_thread_num:%d",io_thread_num);
+    return true;
 }

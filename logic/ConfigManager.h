@@ -3,7 +3,9 @@
 
 #include "../oryx/common.h"
 #include <unordered_map>
+#include <string>
 #include "Player.h"
+using namespace std;
 
 class ConfigManager {
 
@@ -15,6 +17,12 @@ public:
 	virtual bool init();
 
     bool loadServerConfig();
+
+public:
+    string server_name;
+    string listen_addr;
+    INT32  listen_port
+    INT32 io_thread_num;
 
 };
 

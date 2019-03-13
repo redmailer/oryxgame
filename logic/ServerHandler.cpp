@@ -36,9 +36,13 @@ bool ServerHandler::init()
 		return false;
 	}
 
+	ConfigManager * connManager = ConfigManager::getInstance();
+
 	if( !SINGLETON_INIT(PlayerManager) ){
 		return false;
 	}
+
+	ACTION_REGISTER(TestAction);
 
 	setDaemonProcess();
 
@@ -46,11 +50,9 @@ bool ServerHandler::init()
 		return false;
 	}
 
-	ACTION_REGISTER(TestAction);
-
 	TRACEGAME(LOG_LEVEL_INFO, "game start");
 
-	Listener listen("0.0.0.0", 8888, DEVICE_SERVER_EXTERNAL);
+	Listener listen(ConfigManager->listen_addr, ConfigManager->listen_port, DEVICE_SERVER_EXTERNAL);
 	if (listen.doListen() == false) {
 		return false;
 	}
