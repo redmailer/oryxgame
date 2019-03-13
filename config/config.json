@@ -2,5 +2,12 @@
     "server_name" : "oryxgame",
     "listen_addr" : "0.0.0.0",
     "listen_port" : 8888,
-    "io_thread_num" : 4
+    "io_thread_num" : 2,
+    "redis":[
+        {
+            "addr":"127.0.0.1",
+            "port":6379,
+            "auth":"oryxgame.com"
+        }
+    ]
 }
