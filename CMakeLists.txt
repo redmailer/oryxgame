@@ -5,7 +5,9 @@ add_definitions("-std=c++11 -g -Wall")
 include_directories(./thirdSource/include)
 
 LINK_LIBRARIES(pthread)
+LINK_LIBRARIES("${CMAKE_CURRENT_SOURCE_DIR}/thirdSource/lib/libjsoncpp.a")
 LINK_LIBRARIES("${CMAKE_CURRENT_SOURCE_DIR}/thirdSource/lib/libprotobuf.a")
+LINK_LIBRARIES("${CMAKE_CURRENT_SOURCE_DIR}/thirdSource/lib/libhiredis.a")
 
 AUX_SOURCE_DIRECTORY(./oryx ORYX_DIR_SRCS)
 AUX_SOURCE_DIRECTORY(./task TASK_DIR_SRCS)
