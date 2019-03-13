@@ -25,13 +25,24 @@ ServerHandler::ServerHandler() {}
 
 bool ServerHandler::init()
 {
-	setDaemonProcess();
+	
 	signalIgnore();
 
-	if( !SINGLETON_INIT(LogManager) 
-		|| !SINGLETON_INIT(ConfigManager) 
-		|| !SINGLETON_INIT(ThreadManager)
-		|| !SINGLETON_INIT(PlayerManager) ){
+	if( !SINGLETON_INIT(LogManager) ){
+		return false;
+	}
+
+	if( !SINGLETON_INIT(ConfigManager) ){
+		return false;
+	}
+
+	if( !SINGLETON_INIT(PlayerManager) ){
+		return false;
+	}
+
+	setDaemonProcess();
+
+	if( !SINGLETON_INIT(ThreadManager) ){
 		return false;
 	}
 
