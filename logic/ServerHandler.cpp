@@ -32,7 +32,7 @@ bool ServerHandler::init()
 		|| !SINGLETON_INIT(ConfigManager) 
 		|| !SINGLETON_INIT(ThreadManager)
 		|| !SINGLETON_INIT(PlayerManager) ){
-		return false
+		return false;
 	}
 
 	ACTION_REGISTER(TestAction);
