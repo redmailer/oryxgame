@@ -16,8 +16,6 @@ public:
 
     bool loadServerConfig();
 
-public:
-
-}
+};
 
 #endif
