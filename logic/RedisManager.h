@@ -16,10 +16,8 @@ public:
     virtual ~RedisManager() {};
 	virtual bool init();
 
-public:
-
 private:
-    RedisClientVec						m_redisClients;
+    RedisClientVec	m_redisClients;
 
 };
 
