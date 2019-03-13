@@ -1,5 +1,6 @@
 #include "hiredis/hiredis.h"
-
+#include <map>
+#include <vector>
 class RedisClient
 {
 public:
