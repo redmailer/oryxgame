@@ -7,9 +7,6 @@
 #include "../task/task_clientConn.h"
 #include "threadManager.h"
 
-#define SESSION_NEW(a,b)		new SessionConn(a,b)
-#define SESSION_DEL(params)		if(params != NULL){ delete params ; }
-
 struct SessionConn {
 
 	SessionConn(INT64 threadID,INT64 sessionID, DEVICE_TYPE deviceType, struct sockaddr_in& addr) {

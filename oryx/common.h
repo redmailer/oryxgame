@@ -99,13 +99,8 @@ inline void printMemery(byte* data, INT32 len) {
 	printf("\n");
 };
 
-
-
 inline INT64 GetCourrentTime() {
 	return (INT64)time(NULL);
 }
-
-
-
 
 #endif

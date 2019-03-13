@@ -15,6 +15,7 @@
 #include "../oryx/DeviceInfo.h"
 #include "PlayerManager.h"
 #include "TestAction.h"
+#include "ConfigManager.h"
 
 
 
@@ -27,9 +28,12 @@ bool ServerHandler::init()
 	setDaemonProcess();
 	signalIgnore();
 
-	SINGLETON_INIT(LogManager);
-	SINGLETON_INIT(ThreadManager);
-	SINGLETON_INIT(PlayerManager);
+	if( !SINGLETON_INIT(LogManager) 
+		|| !SINGLETON_INIT(ConfigManager) 
+		|| !SINGLETON_INIT(ThreadManager)
+		|| !SINGLETON_INIT(PlayerManager) ){
+		return false
+	}
 
 	ACTION_REGISTER(TestAction);
 
@@ -37,7 +41,7 @@ bool ServerHandler::init()
 
 	Listener listen("0.0.0.0", 8888, DEVICE_SERVER_EXTERNAL);
 	if (listen.doListen() == false) {
-		return 0;
+		return false;
 	}
 
 	ThreadManager::getInstance()->push_task(listen.CreateTask());
@@ -50,7 +54,7 @@ bool ServerHandler::init()
 
 bool ServerHandler::signalIgnore()
 {
-	//忽略一些不必要的信号
+	//锟斤拷锟斤拷一些锟斤拷锟斤拷要锟斤拷锟脚猴拷
 	SignalTool::SignalIgnore(SIGINT);
 	SignalTool::SignalIgnore(SIGHUP);
 	SignalTool::SignalIgnore(SIGQUIT);
@@ -66,16 +70,16 @@ bool ServerHandler::signalIgnore()
 bool ServerHandler::setDaemonProcess()
 {
 	pid_t pid;
-	//让父进程终止，让子进程在后台运行
+	//锟矫革拷锟斤拷锟斤拷锟斤拷止锟斤拷锟斤拷锟接斤拷锟斤拷锟节猴拷台锟斤拷锟斤拷
 	if ((pid = fork()) != 0)
 	{
 		exit(0);
 	}
 	
-	//使子进程成为会话组长，与终端脱离
+	//使锟接斤拷锟教筹拷为锟结话锟介长锟斤拷锟斤拷锟秸讹拷锟斤拷锟斤拷
 	setsid();
 	
-	//让会话组长终止，用第二子进程运行，防止打开新终端
+	//锟矫会话锟介长锟斤拷止锟斤拷锟矫第讹拷锟接斤拷锟斤拷锟斤拷锟叫ｏ拷锟斤拷止锟斤拷锟斤拷锟秸讹拷
 	if ((pid = fork()) != 0)
 	{
 		exit(0);
