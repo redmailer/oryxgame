@@ -3,6 +3,10 @@
 
 SINGLETON_DEFINE(ConfigManager)
 
+ConfigManager:ConfigManager(){
+
+}
+
 bool ConfigManager::init() {
     if(!this->loadServerConfig()){
         TRACEERROR("loadServerConfig failed");
