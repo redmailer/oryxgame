@@ -1,9 +1,9 @@
 #include "ConfigManager.h"
 #include "../oryx/LogManager.h"
-#include<fstream>
+#include <fstream>
+#include <iostream>
 #include "json/json.h"
 SINGLETON_DEFINE(ConfigManager)
-
 
 using namespace std;
 ConfigManager::ConfigManager(){
