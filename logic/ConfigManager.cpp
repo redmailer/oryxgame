@@ -35,8 +35,8 @@ bool ConfigManager::loadServerConfig() {
     this->listen_addr = root["listen_addr"].asString();
     this->listen_port = root["listen_port"].asInt();
     this->io_thread_num = root["io_thread_num"].asInt();
-    TRACEINFO("server_name:%d",server_name);
-    TRACEINFO("listen_addr:%d",listen_addr);
+    TRACEINFO("server_name:%s",server_name.c_str());
+    TRACEINFO("listen_addr:%s",server_name.c_str());
     TRACEINFO("listen_port:%d",listen_port);
     TRACEINFO("io_thread_num:%d",io_thread_num);
     return true;
