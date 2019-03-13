@@ -3,7 +3,7 @@
 
 bool ConfigManager::init() {
     if(!this->loadServerConfig()){
-        TRACEERROR("loadServerConfig failed")
+        TRACEERROR("loadServerConfig failed");
         return false;
     }
     return true;
