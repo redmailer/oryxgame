@@ -27,8 +27,9 @@ ActionResult MessageHandler::processMessage(void * paramMessage)
 	}
 
 	MessageHandlerMap::iterator it_action = m_mapFun.find(pPacket->operatecode);
-	if (it_action == m_mapFun.end()) {
-		TRACEWARN("cannot find messageid :%d from session:%ld", pPacket->operatecode, pConnMsg->session_id);
+	if (it_action == m_mapFun.end() || it_action->second == NULL) {
+		TRACEWARN("cannot find messagefun, messageid :%d from session:%ld", pPacket->operatecode, pConnMsg->session_id);
+		ORYX_DEL(pPacket);
 		return RESULT_UNKNOWNMESSAGE;
 	}
 
@@ -42,7 +43,7 @@ ActionResult MessageHandler::processMessage(void * paramMessage)
 
 	ActionResult result = action->processMessage(pPacket, pConnMsg->session_id);
 
-	//Èç¹ûÊÇÒì²½µÈ´ýÖÐ£¬Ôò²»É¾³ý
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì²½ï¿½È´ï¿½ï¿½Ð£ï¿½ï¿½ï¿½É¾ï¿½ï¿½
 	if (result != RESULT_ASYNC_WAIT) {
 		ORYX_DEL(pPacket);
 	}

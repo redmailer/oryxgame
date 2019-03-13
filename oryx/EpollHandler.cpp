@@ -499,10 +499,17 @@ bool EpollHandler::analysePacket(INT32 fd){
 					return true;
 				}
 
+				INT32 * temp = (INT32 *)(wsp->payLoadData);
+				INT32 packetLen = ntohl(*temp);
+				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen != wsp->wspacket_len) {
+					TRACEEPOLL(LOG_LEVEL_ERROR, "session:%ld-----doRead-----packetLen:%d illegal", deviceInfo->session_id, packetLen);
+					delete wsp;
+					return false;
+				}
 				//�չ�һ������ֱ�ӽ�������
-				// task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
-				// pPacket->InitData(wsp->payLoadData , wsp->payLoadLength );
-				// push_task_main(pPacket);
+				task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
+				pPacket->InitData(wsp->payLoadData , wsp->payLoadLength );
+				push_task_main(pPacket);
 
 				deviceInfo->recv_begin += wsp->wspacket_len;
 				TRACEEPOLL(LOG_LEVEL_INFO, "ws test info:%s",wsp->payLoadData);
