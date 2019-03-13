@@ -21,13 +21,13 @@ bool ConfigManager::init() {
 bool ConfigManager::loadServerConfig() {
     TRACEINFO("loadServerConfig");
     ifstream config;
-    config.open("../config/config.json");
+    config.open("../config/config.json", std::ios::binary);
     if(!config.is_open()){
         return false;
     }
     Json::Reader reader;  
     Json::Value root;  
-    if (!reader.parse(str, root))  
+    if (!reader.parse(config, root, false))  
     {  
         return false;
     } 
