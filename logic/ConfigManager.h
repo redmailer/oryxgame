@@ -2,9 +2,8 @@
 #define __CONFIG_MANAGER__
 
 #include "../oryx/common.h"
-#include <unordered_map>
 #include <string>
-#include "Player.h"
+
 using namespace std;
 
 class ConfigManager {
@@ -21,9 +20,8 @@ public:
 public:
     string server_name;
     string listen_addr;
-    INT32  listen_port;
+    UINT16  listen_port;
     INT32 io_thread_num;
-
 };
 
 #endif

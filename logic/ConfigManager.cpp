@@ -33,7 +33,7 @@ bool ConfigManager::loadServerConfig() {
     } 
     this->server_name = root["server_name"].asString();
     this->listen_addr = root["listen_addr"].asString();
-    this->listen_port = root["listen_port"].asInt();
+    this->listen_port = root["listen_port"].asUInt();
     this->io_thread_num = root["io_thread_num"].asInt();
     TRACEINFO("server_name:%s",server_name.c_str());
     TRACEINFO("listen_addr:%s",server_name.c_str());

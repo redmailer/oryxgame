@@ -11,7 +11,7 @@
 class Listener {
 public:
 	Listener();
-	Listener(const char * addr, INT32 port,INT32 svr_type);
+	Listener(const char * addr, UINT16 port, INT32 svr_type);
 
 	bool doListen();
 
@@ -27,7 +27,7 @@ private:
 
 	INT32 fd;
 	const char * listen_addr;
-	INT32 listen_port;
+	UINT16 listen_port;
 	INT32 svr_type;
 	sockaddr_in svraddr;
 

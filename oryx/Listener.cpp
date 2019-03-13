@@ -18,7 +18,7 @@ Listener::Listener()
 	BZERO(&svraddr, sizeof(svraddr));
 }
 
-Listener::Listener(const char * addr, INT32 port, INT32 svr_type)
+Listener::Listener(const char * addr, UINT16 port, INT32 svr_type)
 {
 	this->fd = -1;
 	BZERO(&svraddr, sizeof(svraddr));
