@@ -668,7 +668,7 @@ int RedisClient::execZRangeByScore(const char * key, long function, std::vector<
 		return -4;
 	}
 
-	for (int i = 0; i < r->elements; ++i)  {
+	for (unsigned int i = 0; i < r->elements; ++i)  {
 		redisReply* childReply = r->element[i];
 		if (childReply->type == REDIS_REPLY_STRING) {
 			vElement.push_back(std::string(childReply->str));
@@ -879,7 +879,7 @@ int RedisClient::smembers(const char * key, std::vector<std::string>& allMembers
 	}
 
 	int count = 0;
-	for (int i = 0; i < r->elements; ++i)  {
+	for (unsigned int i = 0; i < r->elements; ++i)  {
 		redisReply* childReply = r->element[i];
 		if (childReply && childReply->type == REDIS_REPLY_STRING) {
 			allMembers.push_back(std::string(childReply->str));
@@ -971,7 +971,7 @@ int RedisClient::execHGetAll(const char * key, std::map<std::string, std::string
 		return -5;
 	}
 
-	for (int i = 0; i < r->elements; i+=2) {
+	for (unsigned int i = 0; i < r->elements; i+=2) {
 		redisReply* field = r->element[i];
 		redisReply* value = r->element[i+1];
 		result.insert(std::make_pair(field->str, value->str));
