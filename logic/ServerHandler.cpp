@@ -52,7 +52,7 @@ bool ServerHandler::init()
 
 	TRACEGAME(LOG_LEVEL_INFO, "game start");
 
-	Listener listen(connManager->listen_addr, connManager->listen_port, DEVICE_SERVER_EXTERNAL);
+	Listener listen(connManager->listen_addr.c_str(), connManager->listen_port, DEVICE_SERVER_EXTERNAL);
 	if (listen.doListen() == false) {
 		return false;
 	}
