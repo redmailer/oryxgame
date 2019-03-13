@@ -1,6 +1,7 @@
 #ifndef __REDIS_MANAGER__
 #define __REDIS_MANAGER__
 
+#include "../oryx/common.h"
 #include "../oryx/RedisClient.h"
 #include <vector>
 
