@@ -1,7 +1,7 @@
 #include "ConfigManager.h"
 #include "../oryx/LogManager.h"
 #include<fstream>
-#include "json/json"
+#include "json/json.h"
 SINGLETON_DEFINE(ConfigManager)
 
 
