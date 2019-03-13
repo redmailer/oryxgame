@@ -3,7 +3,7 @@
 
 SINGLETON_DEFINE(ConfigManager)
 
-ConfigManager:ConfigManager(){
+ConfigManager::ConfigManager(){
 
 }
 
