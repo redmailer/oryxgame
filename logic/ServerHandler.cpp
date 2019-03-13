@@ -46,7 +46,7 @@ bool ServerHandler::init()
 
 	setDaemonProcess();
 
-	if( !SINGLETON_INIT(ThreadManager) ){
+	if( !SINGLETON_INIT(ThreadManager, connManager->io_thread_num) ){
 		return false;
 	}
 

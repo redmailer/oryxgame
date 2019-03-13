@@ -25,7 +25,7 @@ typedef char byte, BYTE;
 
 typedef bool real, REAL;
 
-#define SINGLETON_INIT(_type)  _type::initManager(new _type)->init()
+#define SINGLETON_INIT(_type,##__VA_ARGS__)  _type::initManager(new _type)->init(##__VA_ARGS__)
 
 #define SINGLETON_DECLEAR(classname)  \
 	public : \

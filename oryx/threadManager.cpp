@@ -5,9 +5,10 @@ SINGLETON_DEFINE(ThreadManager)
 
 ThreadManager::ThreadManager() {}
 
-bool ThreadManager::init()
+bool ThreadManager::init(INT32 thread_num)
 {
-	for (INT32 i = 0; i < 4; i++) {
+	thread_num = thread_num < 1 ? 1: thread_num;
+	for (INT32 i = 0; i < thread_num; i++) {
 		Thread * thread_t = new EpollHandler();
 		thread_t->run();
 		addThread_Epoll(thread_t);

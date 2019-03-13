@@ -15,7 +15,7 @@ class ThreadManager  {
 	SINGLETON_DECLEAR(ThreadManager)
 
 public:
-	bool init();
+	bool init(INT32 thread_num = 1);
 
 	Thread * getLessPressureThread_Epoll(INT64 threadID = 0);
 
