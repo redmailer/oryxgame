@@ -41,7 +41,7 @@ public:
 	bool logEpoll(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, ...);
 	bool logAsync(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, ...);
 
-private:
+public:
 	Logger logic_Logger;
 	Logger epoll_Logger;
 	Logger async_Logger;
