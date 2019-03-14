@@ -60,7 +60,7 @@ bool ConfigManager::loadServerConfig() {
         strncpy(redis_info->auth, root["redis"][i]["auth"].asString().c_str(), sizeof(redis_info->auth));
         redis_info->port = root["redis"][i]["port"].asInt();
         TRACEINFO("redis :%d ip:%s port:%d auth:%s",i,redis_info->addr,redis_info->port,redis_info->auth);
-        this->redis_list.push_pack(redis_info);
+        this->redis_list.push_back(redis_info);
     }
 
     return true;
