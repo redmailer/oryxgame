@@ -23,6 +23,7 @@ int RedisClient::connectRedis() {
 	if (m_c){
 		//如果m_c不是空，需要将连接释放，在重新建立连接
 		redisFree(m_c);
+		m_c = NULL;
 	}
 
 	struct timeval tv;
@@ -42,6 +43,7 @@ int RedisClient::connectRedis() {
 	}
 	if(m_pswd[0] && _auth() < 0) {
 		redisFree(m_c);
+		m_c = NULL;
 		TRACEERROR("# Redis AUTH %s:%u fail!!", m_ip, m_port);
 		return -1;
 	}
