@@ -7,7 +7,7 @@ Logger::Logger()
 {
 	BZERO(file_name, MAX_FILE_NAME_SIZE);
 	isInit = false;
-	isPrintScreen = false;
+	isPrintScreen = true;
 	max_log_type = LOG_LEVEL_DEBUG;
 }
 
