@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include <string>
 #include <stdarg.h>
+#include <iostream>
 Logger::Logger()
 {
 	BZERO(file_name, MAX_FILE_NAME_SIZE);
 	isInit = false;
+	isPrintScreen = false;
 	max_log_type = LOG_LEVEL_DEBUG;
 }
 
-bool Logger::init(const char * filename, int logTypeMax)
+bool Logger::init(const char * filename, int logTypeMax, bool print_screen)
 {
 	if (filename == NULL || strlen(filename) >= MAX_FILE_NAME_SIZE) {
 		return false;
@@ -19,16 +21,9 @@ bool Logger::init(const char * filename, int logTypeMax)
 	this->max_log_type = (LOG_LEVEL)logTypeMax;
 
 	isInit = true;
+	this->isPrintScreen = print_screen;
 	return true;
 
-}
-
-bool Logger::debug( const char * file,int line, const char *pcContent, va_list& ap)
-{
-	if (isInit == false) {
-		return false;
-	}
-	return log(LOG_LEVEL_DEBUG, file, line, pcContent, ap);
 }
 
 bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, va_list& ap)
@@ -43,6 +38,17 @@ bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *p
 	time_t tNow = time(NULL);
 	struct tm stTempTm;
 	localtime_r(&tNow, &stTempTm);
+
+	if (this->isPrintScreen){
+		printf(pFile, "<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
+		vprintf(pcContent, ap);
+		printf("\n");
+	}
+	
+	if(strlen(file_name) == 0){
+		return false;
+	}
+
 	char fileName[MAX_FILE_NAME_SIZE];
 
 	sprintf(fileName, "%s-%04d%02d%02d-%02d.log", this->file_name,
@@ -82,18 +88,14 @@ LogManager::LogManager() {};
 
 bool LogManager::init()
 {
-	logic_Logger.init("../log/gameLogic");
-	epoll_Logger.init("../log/gameEpoll");
-	async_Logger.init("../log/gameAsync");
+	// logic_Logger.init("../log/gameLogic");
+	// epoll_Logger.init("../log/gameEpoll");
+	// async_Logger.init("../log/gameAsync");
 	return true;
 }
 
 bool LogManager::logLogic(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, ...)
 {
-	if (logic_Logger.isInited() == false) {
-		return false;
-	}
-
 	if (file == NULL || pcContent == NULL) {
 		return false;
 	}
@@ -108,10 +110,6 @@ bool LogManager::logLogic(LOG_LEVEL iLogLevel, const char * file, int line, cons
 
 bool LogManager::logEpoll(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, ...)
 {
-	if (epoll_Logger.isInited() == false) {
-		return false;
-	}
-
 	va_list ap;
 	va_start(ap, pcContent);
 	bool iRet = epoll_Logger.log(iLogLevel, file, line, pcContent, ap);
@@ -122,10 +120,6 @@ bool LogManager::logEpoll(LOG_LEVEL iLogLevel, const char * file, int line, cons
 
 bool LogManager::logAsync(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, ...)
 {
-	if (async_Logger.isInited() == false) {
-		return false;
-	}
-
 	va_list ap;
 	va_start(ap, pcContent);
 	bool iRet = async_Logger.log(iLogLevel, file, line, pcContent, ap);

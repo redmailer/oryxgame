@@ -13,18 +13,10 @@ enum LOG_LEVEL {
 	LOG_LEVEL_ERROR = 3
 };
 
-
-
 class Logger {
 public:
 	Logger();
-	bool init( const char * filename, int logTypeMax = LOG_LEVEL_DEBUG);
-
-	bool debug( const char * file, int line, const char *pcContent, va_list& ap);
-	bool info( const char * file, int line, const char *pcContent, va_list& ap);
-	bool warn( const char * file, int line, const char *pcContent, va_list& ap);
-	bool error( const char * file, int line, const char *pcContent, va_list& ap);
-
+	bool init( const char * filename, int logTypeMax = LOG_LEVEL_DEBUG, bool print_screen = false);
 	bool log(LOG_LEVEL iLogLevel, const char * file, int line, const char *pcContent, va_list& ap);
 
 	inline bool isInited() { return this->isInit; }
@@ -35,6 +27,7 @@ private:
 	LOG_LEVEL  max_log_type;
 
 	bool isInit;
+	bool isPrintScreen;
 
 };
 

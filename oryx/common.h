@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#define ORYX_NEW(_type,_params,...) new _type(_params,##__VA_ARGS__)
+#define ORYX_NEW(_type,...) new _type(__VA_ARGS__)
 #define ORYX_DEL(_param) if(_param != NULL){delete _param;}
 
 typedef short int16, INT16;

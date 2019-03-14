@@ -16,7 +16,7 @@
 #include "PlayerManager.h"
 #include "TestAction.h"
 #include "ConfigManager.h"
-
+#include "RedisManager.h"
 
 
 SINGLETON_DEFINE(ServerHandler)
@@ -25,9 +25,6 @@ ServerHandler::ServerHandler() {}
 
 bool ServerHandler::init()
 {
-	
-	signalIgnore();
-
 	if( !SINGLETON_INIT(LogManager) ){
 		return false;
 	}
@@ -36,7 +33,16 @@ bool ServerHandler::init()
 		return false;
 	}
 
-	ConfigManager * connManager = ConfigManager::getInstance();
+	ConfigManager * cfgManager = ConfigManager::getInstance();
+	LogManager * logManager = logManager::getInstance();
+	logManager->logic_Logger.init(cfgManager.log_game.path, cfgManager.log_game.log_level, cfgManager.print_screen);
+	logManager->epoll_Logger.init(cfgManager.log_epoll.path, cfgManager.log_epoll.log_level, cfgManager.print_screen);
+	logManager->async_Logger.init(cfgManager.log_async.path, cfgManager.log_async.log_level, cfgManager.print_screen);
+
+	if(cfgManager->daemon_process){
+		setDaemonProcess();
+		signalIgnore();
+	}
 
 	if( !SINGLETON_INIT(PlayerManager) ){
 		return false;
@@ -44,15 +50,13 @@ bool ServerHandler::init()
 
 	ACTION_REGISTER(TestAction);
 
-	setDaemonProcess();
-
-	if( !SINGLETON_INIT(ThreadManager, connManager->io_thread_num) ){
+	if( !SINGLETON_INIT(ThreadManager, cfgManager->io_thread_num) ){
 		return false;
 	}
 
 	TRACEGAME(LOG_LEVEL_INFO, "game start");
 
-	Listener listen(connManager->listen_addr.c_str(), connManager->listen_port, DEVICE_SERVER_EXTERNAL);
+	Listener listen(cfgManager->listen_addr.c_str(), cfgManager->listen_port, DEVICE_SERVER_EXTERNAL);
 	if (listen.doListen() == false) {
 		return false;
 	}
