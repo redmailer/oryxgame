@@ -22,6 +22,7 @@
 
     "redis":[
         {
+            "id":0,
             "addr":"127.0.0.1",
             "port":6379,
             "auth":"oryxgame.com"

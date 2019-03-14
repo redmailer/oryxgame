@@ -26,10 +26,12 @@ ServerHandler::ServerHandler() {}
 bool ServerHandler::init()
 {
 	if( !SINGLETON_INIT(LogManager) ){
+		printf("SINGLETON_INIT(LogManager) failed\n");
 		return false;
 	}
 
 	if( !SINGLETON_INIT(ConfigManager) ){
+		TRACEERROR("SINGLETON_INIT(ConfigManager) failed");
 		return false;
 	}
 
@@ -44,13 +46,20 @@ bool ServerHandler::init()
 		signalIgnore();
 	}
 
+	if(!SINGLETON_INIT(RedisManager, cfgManager->redis_list)){
+		TRACEERROR("SINGLETON_INIT(RedisManager) failed");
+		return false;
+	}
+
 	if( !SINGLETON_INIT(PlayerManager) ){
+		TRACEERROR("SINGLETON_INIT(PlayerManager) failed");
 		return false;
 	}
 
 	ACTION_REGISTER(TestAction);
 
 	if( !SINGLETON_INIT(ThreadManager, cfgManager->io_thread_num) ){
+		TRACEERROR("SINGLETON_INIT(ThreadManager) failed");
 		return false;
 	}
 
@@ -65,6 +74,7 @@ bool ServerHandler::init()
 
 	TimerControl::register_timerFun(update_1s, 1000);
 	TimerControl::register_timerFun(update_2s, 2000);
+	TimerControl::register_timerFun(update_10s, 10000);
 
 	return true;
 }
@@ -125,10 +135,17 @@ void ServerHandler::run()
 
 void ServerHandler::update_1s(INT64 time_MilliSec)
 {
-	//TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_MilliSec);
+	TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_MilliSec);
+	RedisManager * redisManager = RedisManager::getInstance();
+	redisManager->checkRedisConnection();
 }
 
 void ServerHandler::update_2s(INT64 time_MilliSec)
+{
+	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_MilliSec);
+}
+
+void ServerHandler::update_10s(INT64 time_MilliSec)
 {
 	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_MilliSec);
 }

@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Redis_Info {
+    INT32 id;
     char addr[128];
     char auth[128];
     UINT16 port;

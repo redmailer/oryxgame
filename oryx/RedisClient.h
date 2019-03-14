@@ -4,7 +4,7 @@
 class RedisClient
 {
 public:
-	RedisClient(const char * ip, unsigned short port, const char * pswd);
+	RedisClient(const char * ip, unsigned short port, const char * pswd, int id);
 	~RedisClient();
 
 	//重连 (<0失败)
@@ -175,4 +175,6 @@ public:
 	unsigned short	m_port;
 	char			m_errmsg[128];
 	redisContext*	m_c;
+	int				m_id;
+	bool			m_connStatus;
 };

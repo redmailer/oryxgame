@@ -4,12 +4,14 @@
 #include <sstream>
 #include <string.h>
 
-RedisClient::RedisClient(const char * ip, unsigned short port, const char * pswd)
+RedisClient::RedisClient(const char * ip, unsigned short port, const char * pswd, int id)
 {
 	strncpy(m_ip, ip, sizeof(m_ip));
 	strncpy(m_pswd, pswd, sizeof(m_pswd));
 	m_port = port;
 	m_c = NULL;
+	m_id = id;
+	m_connStatus = false;
 }
 
 RedisClient::~RedisClient()
@@ -43,6 +45,7 @@ int RedisClient::connectRedis() {
 		TRACEERROR("# Redis AUTH %s:%u fail!!", m_ip, m_port);
 		return -1;
 	}
+	m_connStatus = true;
 	return 0;
 }
 
@@ -53,7 +56,6 @@ int RedisClient::_auth() {
 	}
 	char cmd[128];
 	snprintf(cmd, 127, "AUTH %s", m_pswd);
-	TRACEINFO("Succeed1 to execute command[%s]", cmd);
 	redisReply* r = (redisReply*)redisCommand(m_c, cmd);
 	if(NULL == r) {
 		redisFree(m_c);
@@ -71,7 +73,6 @@ int RedisClient::_auth() {
 		}
 	}
 	freeReplyObject(r);
-	TRACEINFO("Succeed to execute command[%s]",cmd);
 	return 1;
 }
 

@@ -4,6 +4,7 @@
 #include "../oryx/common.h"
 #include "../oryx/RedisClient.h"
 #include <vector>
+#include "ConfigStruct.h"
 
 
 typedef std::vector<RedisClient *>  RedisClientVec;
@@ -15,7 +16,9 @@ class RedisManager {
 
 public:
     virtual ~RedisManager() {};
-	virtual bool init();
+	virtual bool init(Redis_List & redis_list);
+
+    void checkRedisConnection();
 
 private:
     RedisClientVec	m_redisClients;
