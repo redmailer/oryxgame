@@ -25,14 +25,14 @@ bool RedisManager::init(Redis_List & redis_list) {
 void RedisManager::checkRedisConnection() {
     RedisClientVec::iterator it = this->m_redisClients.begin();
     for(; it != this->m_redisClients.end(); it ++){
-        if((*it)->m_m_connStatus && (*it)->ping() < 0){
-            TRACEERROR("RedisClient id:%d disconnected",(*it)->id,result);
-            (*it)->m_m_connStatus = false;
+        if((*it)->m_connStatus && (*it)->ping() < 0){
+            TRACEERROR("RedisClient id:%d disconnected",(*it)->m_id);
+            (*it)->m_connStatus = false;
         }
-        if(!(*it)->m_m_connStatus){
+        if(!(*it)->m_connStatus){
             INT32 result = (*it)->connectRedis();
             if(result < 0){
-                TRACEERROR("RedisClient id:%d connect failed, result:%d",redis_info->id,result);
+                TRACEERROR("RedisClient id:%d connect failed, result:%d",(*it)->m_id,result);
             }
         }
     }
