@@ -35,9 +35,9 @@ bool ServerHandler::init()
 
 	ConfigManager * cfgManager = ConfigManager::getInstance();
 	LogManager * logManager = LogManager::getInstance();
-	logManager->logic_Logger.init(cfgManager.log_game.path, cfgManager.log_game.log_level, cfgManager.print_screen);
-	logManager->epoll_Logger.init(cfgManager.log_epoll.path, cfgManager.log_epoll.log_level, cfgManager.print_screen);
-	logManager->async_Logger.init(cfgManager.log_async.path, cfgManager.log_async.log_level, cfgManager.print_screen);
+	logManager->logic_Logger.init(cfgManager->log_game.path, cfgManager->log_game.log_level, cfgManager->print_screen);
+	logManager->epoll_Logger.init(cfgManager->log_epoll.path, cfgManager->log_epoll.log_level, cfgManager->print_screen);
+	logManager->async_Logger.init(cfgManager->log_async.path, cfgManager->log_async.log_level, cfgManager->print_screen);
 
 	if(cfgManager->daemon_process){
 		setDaemonProcess();
