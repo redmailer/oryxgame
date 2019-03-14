@@ -12,8 +12,8 @@ typedef void (*_TIMERVAL_FUN_)(INT64);
 
 struct TimerFunInfo {
 	_TIMERVAL_FUN_  timeval_fun;
-	INT64  interval;		/*∫¡√Î*/
-	INT64 lastRunTime;		/*∫¡√Î*/
+	INT64  interval;
+	INT64 lastRunTime;
 };
 
 
@@ -25,12 +25,12 @@ public:
 
 	virtual INT32 update();
 
-	void register_timerFun(_TIMERVAL_FUN_ _fun, INT64 interval /*∫¡√Î*/ );
+	void register_timerFun(_TIMERVAL_FUN_ _fun, INT64 interval);
 
 
 private:
-	TIMEVAL m_lastRunTime;		// …œ“ª÷°‘À–– ±º‰ £®∫¡√Î£©
-	TIMEVAL m_nowTime;			// £®∫¡√Î£©
+	TIMEVAL m_lastRunTime;
+	TIMEVAL m_nowTime;
 
 	std::vector<TimerFunInfo *>  m_vecTimerFun;
 

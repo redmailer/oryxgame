@@ -133,20 +133,20 @@ void ServerHandler::run()
 	}
 }
 
-void ServerHandler::update_1s(INT64 time_MilliSec)
+void ServerHandler::update_1s(INT64 time_stamp)
 {
-	TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_MilliSec);
+	TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_stamp);
 	RedisManager * redisManager = RedisManager::getInstance();
 	redisManager->checkRedisConnection();
 }
 
-void ServerHandler::update_2s(INT64 time_MilliSec)
+void ServerHandler::update_2s(INT64 time_stamp)
 {
-	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_MilliSec);
+	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_stamp);
 }
 
-void ServerHandler::update_10s(INT64 time_MilliSec)
+void ServerHandler::update_10s(INT64 time_stamp)
 {
-	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_MilliSec);
+	//TRACEGAME(LOG_LEVEL_DEBUG, "ServerHandler::update_2s %ld", time_stamp);
 }
 

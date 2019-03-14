@@ -21,7 +21,7 @@ INT32 TimerControl::update()
 
 		if (timeNow_MilliSecond >= m_vecTimerFun[i]->lastRunTime + m_vecTimerFun[i]->interval) {
 
-			m_vecTimerFun[i]->timeval_fun(timeNow_MilliSecond);
+			m_vecTimerFun[i]->timeval_fun(m_nowTime.tv_sec);
 
 			INT64 addVal = timeNow_MilliSecond - m_vecTimerFun[i]->lastRunTime;
 			addVal -= addVal % m_vecTimerFun[i]->interval;
