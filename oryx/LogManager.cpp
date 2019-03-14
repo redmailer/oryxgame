@@ -39,8 +39,17 @@ bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *p
 	struct tm stTempTm;
 	localtime_r(&tNow, &stTempTm);
 
+	const char * fileNameBegin = file + strlen(file);
+	while (fileNameBegin > file) {
+		if (*fileNameBegin == '/') {
+			fileNameBegin++;
+			break;
+		}
+		fileNameBegin--;
+	}
+
 	if (this->isPrintScreen){
-		printf(pFile, "<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
+		printf("<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
 		vprintf(pcContent, ap);
 		printf("\n");
 	}
@@ -60,15 +69,6 @@ bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *p
 	FILE * pFile = fopen(fileName, "a+");
 	if (pFile == NULL) {
 		return false;
-	}
-
-	const char * fileNameBegin = file + strlen(file);
-	while (fileNameBegin > file) {
-		if (*fileNameBegin == '/') {
-			fileNameBegin++;
-			break;
-		}
-		fileNameBegin--;
 	}
 
 	fprintf(pFile, "<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
