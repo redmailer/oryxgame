@@ -44,11 +44,11 @@ bool ConfigManager::loadServerConfig() {
 
     this->print_screen = root["print_screen"].asBool();
     strncpy(this->log_game.path, root["log_game"]["path"].asString().c_str(), sizeof(this->log_game.path));
-    this->log_game.log_level, root["log_game"]["log_leve"].asInt();
+    this->log_game.log_level, root["log_game"]["log_level"].asInt();
     strncpy(this->log_epoll.path, root["log_epoll"]["path"].asString().c_str(), sizeof(this->log_epoll.path));
-    this->log_epoll.log_level, root["log_epoll"]["log_leve"].asInt();
+    this->log_epoll.log_level, root["log_epoll"]["log_level"].asInt();
     strncpy(this->log_async.path, root["log_async"]["path"].asString().c_str(), sizeof(this->log_async.path));
-    this->log_async.log_level, root["log_async"]["log_leve"].asInt();
+    this->log_async.log_level, root["log_async"]["log_level"].asInt();
     TRACEINFO("log_game  path: %s , level:%d", this->log_game.path, this->log_game.log_level);
     TRACEINFO("log_epoll  path: %s , level:%d", this->log_epoll.path, this->log_epoll.log_level);
     TRACEINFO("log_async  path: %s , level:%d", this->log_async.path, this->log_async.log_level);
