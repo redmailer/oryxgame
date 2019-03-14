@@ -42,8 +42,6 @@ int RedisClient::connectRedis() {
 		return -2;
 	}
 	if(m_pswd[0] && _auth() < 0) {
-		redisFree(m_c);
-		m_c = NULL;
 		TRACEERROR("# Redis AUTH %s:%u fail!!", m_ip, m_port);
 		return -1;
 	}
@@ -63,6 +61,7 @@ int RedisClient::_auth() {
 	redisReply* r = (redisReply*)redisCommand(m_c, cmd);
 	if(NULL == r) {
 		redisFree(m_c);
+		m_c = NULL;
 		TRACEINFO("alloc reply error, cmd:%s",cmd);
 		return -2;
 	}
@@ -73,6 +72,7 @@ int RedisClient::_auth() {
 			TRACEERROR("Failed to execute command[%s]",cmd);
 			freeReplyObject(r);
 			redisFree(m_c);
+			m_c = NULL;
 			return -3;
 		}
 	}
