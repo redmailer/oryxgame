@@ -9,7 +9,7 @@ RedisManager::RedisManager(){
 }
 
 bool RedisManager::init(Redis_List & redis_list) {
-    for(INT32 i = 0 ; i < redis_list.size(); i ++){
+    for(UINT32 i = 0 ; i < redis_list.size(); i ++){
         Redis_Info* redis_info = redis_list[i];
         RedisClient * redis_client = ORYX_NEW(RedisClient, redis_info->addr, redis_info->port, redis_info->auth, redis_info->id);
         this->m_redisClients.push_back(redis_client);

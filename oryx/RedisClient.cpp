@@ -40,11 +40,13 @@ int RedisClient::connectRedis() {
 		TRACEERROR("m_c error free");
 		return -2;
 	}
-	TRACEINFO("connect redis success, ip:%s, port:%d", m_ip, m_port);
 	if(m_pswd[0] && _auth() < 0) {
+		redisFree(m_c);
 		TRACEERROR("# Redis AUTH %s:%u fail!!", m_ip, m_port);
 		return -1;
 	}
+	TRACEINFO("connect redis success, ip:%s, port:%d", m_ip, m_port);
+
 	m_connStatus = true;
 	return 0;
 }
