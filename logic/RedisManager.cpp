@@ -38,3 +38,17 @@ void RedisManager::checkRedisConnection() {
     }
 }
 
+RedisClient * RedisManager::getRedisClient(INT32 id){
+    RedisClient * redis_client = NULL;
+    for(RedisClientVec::iterator it = this->m_redisClients.begin(); it != this->m_redisClients.end(); it++){
+        if((*it)->m_id == id){
+            redis_client = *it;
+            break;
+        }
+    }
+    if (redis_client == NULL && this->m_redisClients.size() > 0 ) {
+        redis_client = this->m_redisClients[0];
+    }
+    return redis_client;
+}
+

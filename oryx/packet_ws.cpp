@@ -49,6 +49,10 @@ PacketWS* PacketWS::DecodeWsPacket(const char * data, INT32 len, INT32& error){
     return wsp;
 }
 
+PacketWS * PacketWS::EncodeWsPacket(const char * data, INT32 len){
+    
+}
+
 PacketWS::PacketWS(){
     this->init();
 }

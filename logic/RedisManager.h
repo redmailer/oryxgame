@@ -19,6 +19,7 @@ public:
 	virtual bool init(Redis_List & redis_list);
 
     void checkRedisConnection();
+    RedisClient * getRedisClient(INT32 id = 0);
 
 private:
     RedisClientVec	m_redisClients;
