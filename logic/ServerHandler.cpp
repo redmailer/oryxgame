@@ -135,7 +135,7 @@ void ServerHandler::run()
 
 void ServerHandler::update_1s(INT64 time_stamp)
 {
-	TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_stamp);
+	//TRACEGAME(LOG_LEVEL_DEBUG,"ServerHandler::update_1s %ld", time_stamp);
 	RedisManager * redisManager = RedisManager::getInstance();
 	redisManager->checkRedisConnection();
 }
