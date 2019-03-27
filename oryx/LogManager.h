@@ -13,13 +13,6 @@ enum LOG_LEVEL {
 	LOG_LEVEL_ERROR = 3
 };
 
-extern const char* LOG_LEVEL_STRING[] = {
-	"[DEBG]",
-	"[INFO]",
-	"[WARN]",
-	"[ERRO]",
-};
-
 class Logger {
 public:
 	Logger();

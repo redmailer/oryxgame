@@ -3,6 +3,14 @@
 #include <string>
 #include <stdarg.h>
 #include <iostream>
+
+extern const char* LOG_LEVEL_STRING[] = {
+	"[DEBG]",
+	"[INFO]",
+	"[WARN]",
+	"[ERRO]",
+};
+
 Logger::Logger()
 {
 	BZERO(file_name, MAX_FILE_NAME_SIZE);
