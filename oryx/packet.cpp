@@ -161,7 +161,7 @@ byte* Packet::GetRealData()
 }
 
 INT32 Packet::GetRealDataLen(){
-	return this->dataNowLen - PACKET_HEAD_LEN
+	return this->dataNowLen - PACKET_HEAD_LEN;
 }
 
 void Packet::PrintData()
