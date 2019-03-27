@@ -21,8 +21,9 @@ public:
 	void onPlayerLogoff(INT64 player_id);
 
 	bool sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto = NULL);
+	bool sendToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, char * msg = NULL, INT32 msgLen = 0);
 	bool sendProtoToSession(INT64 session_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto = NULL);
-
+	bool sendToSession(INT64 player_id, INT32 messageID, INT32 errCode, char * msg = NULL, INT32 msgLen = 0);
 
 public:
 
@@ -62,11 +63,11 @@ public:
 
 
 private:
-	PlayerMap m_mapPlayer_All;			//所有玩家的缓存列表
+	PlayerMap m_mapPlayer_All;
 
-	PlayerMap m_mapAllPlayer_Dirty;		//需要保存的玩家
+	PlayerMap m_mapAllPlayer_Dirty;
 
-	PlayerSessionMap m_mapAllPlayer_Online;	//在线玩家的列表
+	PlayerSessionMap m_mapAllPlayer_Online;
 
 	INT64 m_iAutoIncrPlayerID;
 

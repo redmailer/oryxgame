@@ -41,7 +41,7 @@ ActionResult MessageHandler::processMessage(void * paramMessage)
 
 	Action * action = it_action->second;
 
-	ActionResult result = action->processMessage(pPacket, pConnMsg->session_id);
+	ActionResult result = action->processMessage(*pPacket, pConnMsg->session_id);
 
 	//������첽�ȴ��У���ɾ��
 	if (result != RESULT_ASYNC_WAIT) {

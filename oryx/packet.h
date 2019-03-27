@@ -32,7 +32,8 @@ public:
 	Packet* Pack();
 	Packet* WriteHead();
 
-	byte* GetRealData(INT32 & len);
+	byte* GetRealData();
+	INT32 GetRealDataLen();
 	void PrintData();
 
 	Packet* Append(void * data, INT32 len);
@@ -57,15 +58,15 @@ private:
 public:
 	void setMessageIdx(UINT32 idx);
 
-	INT32 message_len;
-	INT32 version;
+	INT32 message_len;		
+	INT16 version;
 	INT32 operatecode;
 	INT32 errorcode;
 	UINT32 message_idx;
 	byte*  data;
 
-	INT32 dataMaxLen;		//��������С
-	INT32 dataNowLen;		//��ǰʹ�õĻ�������С
+	INT32 dataMaxLen;		//当前缓冲区长度
+	INT32 dataNowLen;		//当前包用到的长度（<=dataMaxLen）
 
 };
 

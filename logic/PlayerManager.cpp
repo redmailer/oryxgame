@@ -27,7 +27,6 @@ INT32 PlayerManager::onPlayerLogin(INT64 player_id, SessionConn * pConn)
 		return Proto::RESULT_LOGIN_NOEXIST;
 	}
 
-	//不能重复登录
 	if (pConn->player_id == player_id) {
 		TRACEWARN("onPlayerLogin repeated player:%ld", player_id);
 		return Proto::RESULT_LOGIN_REPEATED;
@@ -36,22 +35,18 @@ INT32 PlayerManager::onPlayerLogin(INT64 player_id, SessionConn * pConn)
 	Player * pPlayer = getPlayer(player_id);
 	if (pPlayer == NULL){
 		TRACEERROR("onPlayerLogin failed cannot find player:%ld ", player_id);
-		//玩家不存在，记得返回错误
 		return Proto::RESULT_LOGIN_NOEXIST;
 	}
 
-	//异地登录 处理
 	INT64 oldSession_id = 0;
 	SessionConn * pOldConn = getPlayerSession(player_id);
 	if (pOldConn != NULL) {
-		//这里不判断pOldConn 的 player_id。如果是错的，也应该让他下线
 		pOldConn->player_id = 0;
 		oldSession_id = pOldConn->session_id;
 	}
 	pConn->player_id = player_id;
 	m_mapAllPlayer_Online[player_id] = pConn;
 	TRACEINFO("onPlayerLogin player_id:%ld session_id:%ld old_session_id:%ld", player_id, pConn->session_id, oldSession_id);
-	//处理玩家登录的数据并返回
 
 	return Proto::RESULT_SUCCESS;
 
@@ -67,8 +62,6 @@ void PlayerManager::onPlayerLogoff(INT64 player_id)
 		session_id = pConn->session_id;
 	}
 	TRACEINFO("onPlayerLogoff player_id:%ld session_id:%ld", player_id, session_id);
-	
-	//处理玩家下线
 }
 
 bool PlayerManager::sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto)
@@ -83,7 +76,19 @@ bool PlayerManager::sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 er
 	}
 	
 	return sendProtoToSession(pConn->session_id, messageID, errCode, proto);
+}
 
+bool PlayerManager::sendToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, char * msg, INT32 msgLen){
+	if (player_id <= 0 ) {
+		TRACEERROR("sendProtoToPlayer failed,player_id :%ld", player_id);
+		return false;
+	}
+	SessionConn * pConn = getPlayerSession(player_id);
+	if (pConn == NULL) {
+		return false;
+	}
+	
+	return sendToSession(pConn->session_id, messageID, errCode, msg, msgLen);
 }
 
 bool PlayerManager::sendProtoToSession(INT64 session_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto)
@@ -112,8 +117,30 @@ bool PlayerManager::sendProtoToSession(INT64 session_id, INT32 messageID, INT32 
 
 	}
 	
-	bool Result = sendMsgToConn(session_id, pPack->data, pPack->message_len);
+	bool result = sendMsgToConn(session_id, pPack->data, pPack->message_len);
 	ORYX_DEL(pPack);
 
-	return Result;
+	return result;
+}
+
+bool PlayerManager::sendToSession(INT64 player_id, INT32 messageID, INT32 errCode, char * msg, INT32 msgLen){
+	if (session_id <= 0 || msgLen < 0 ) {
+		TRACEERROR("sendToSession failed,session_id :%ld", session_id);
+		return false;
+	}
+
+	Packet* pPack = Packet::NewPacket(messageID, errCode);
+	if (pPack == NULL) {
+		TRACEERROR("sendToSession failed,session_id :%ld,NewPacket failed", session_id);
+		return false;
+	}
+
+	if (msg != NULL && msgLen > 0) {
+		pPack->Append(msg, msgLen);
+	}
+	
+	bool result = sendMsgToConn(session_id, pPack->data, pPack->message_len);
+	ORYX_DEL(pPack);
+
+	return result;
 }

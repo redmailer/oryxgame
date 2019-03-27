@@ -51,6 +51,8 @@ Packet* Packet::WriteData(void * data, INT32 len, INT32 pos)
 	}
 	CheckLen(len + pos);
 	memcpy(this->data + pos, data, len);
+	this->dataNowLen += len;
+	this->message_len += len;
 	return this;
 }
 
@@ -133,9 +135,6 @@ UINT16 Packet::Read(UINT16 & data, INT32 pos)
 Packet* Packet::WriteHead()
 {
 	this->CheckLen(this->message_len);
-	//this->message_len = PACKET_HEAD_LEN;
-	//this->dataNowLen = PACKET_HEAD_LEN;
-
 	this->Write(this->message_len, OFFSET_MESSLEN);
 	this->Write(this->version, OFFSET_VERSION);
 	this->Write(this->operatecode, OFFSET_OPERCODE);
@@ -148,21 +147,21 @@ Packet* Packet::Append(void * data, INT32 len)
 {
 	if (data != NULL && len > 0) {
 		this->WriteData(data, len, this->dataNowLen);
-		this->dataNowLen += len;
-		this->message_len += len;
 		this->WriteHead();
 	}
 	return this;
 }
 
-byte* Packet::GetRealData(INT32 & len)
+byte* Packet::GetRealData()
 {
 	if (this->dataNowLen - PACKET_HEAD_LEN > 0) {
-		len = this->dataNowLen - PACKET_HEAD_LEN;
 		return this->data + PACKET_HEAD_LEN;
 	}
-	len = 0;
 	return NULL;
+}
+
+INT32 Packet::GetRealDataLen(){
+	return this->dataNowLen - PACKET_HEAD_LEN
 }
 
 void Packet::PrintData()
@@ -202,6 +201,7 @@ void Packet::CheckLen(INT32 len)
 
 	if (this->data != NULL) {
 		delete[] this->data;
+		this->data = NULL;
 	}
 
 	this->data = buff;

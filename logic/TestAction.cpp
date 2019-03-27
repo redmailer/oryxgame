@@ -1,18 +1,18 @@
 #include "TestAction.h"
 #include "../proto/pb/messageID.pb.h"
 #include "../oryx/LogManager.h"
-#include "../oryx/ClientConnManager.h"
 #include "../oryx/MessageHandler.h"
+#include "PlayerManager.h"
 
 using namespace Proto;
 
-ActionResult TestAction::processMessage(Packet * packet, INT64 sessionID)
+ActionResult TestAction::processMessage(Packet & packet, INT64 sessionID)
 {
-	if (!MESSAGE_ID_IsValid(packet->operatecode)) {
+	if (!MESSAGE_ID_IsValid(packet.operatecode)) {
 		return ActionResult::RESULT_PARSEERROR;
 	}
 
-	SessionConn * pConn = ClientConnManager::getInstance()->getSession_BySessionID(sessionID);
+	SessionConn * pConn = PlayerManager::getInstance()->getSession_BySessionID(sessionID);
 	if (pConn == NULL) {
 		TRACEINFO("TestAction processMessage :%s from session:%ld (but no longer exist)", MESSAGE_ID_Name((MESSAGE_ID)packet->operatecode).c_str(), sessionID);
 		return RESULT_SESSION_CLOSED;
@@ -23,9 +23,10 @@ ActionResult TestAction::processMessage(Packet * packet, INT64 sessionID)
 
 	
 
-	switch (packet->operatecode)
+	switch (packet.operatecode)
 	{
 	case MSGID_HEART_BEAT:
+		PlayerManager::getInstance()->sendProtoToSession(sessionID, packet.operatecode, 0, packet.GetRealData(), packet.GetRealDataLen())
 		break;
 	default:
 		break;

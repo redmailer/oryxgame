@@ -9,7 +9,7 @@ public:
 	TestAction() {};
 
 public:
-	ActionResult processMessage(Packet * packet, INT64 sessionID);
+	ActionResult processMessage(Packet & packet, INT64 sessionID);
 	void initAction();
 };
 

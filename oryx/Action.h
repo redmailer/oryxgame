@@ -22,7 +22,7 @@ public:
 
 	virtual void initAction() = 0;
 
-	virtual ActionResult processMessage(Packet * packet, INT64 sessionID) = 0;
+	virtual ActionResult processMessage(Packet & packet, INT64 sessionID) = 0;
 
 };
 
