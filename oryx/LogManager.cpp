@@ -49,7 +49,7 @@ bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *p
 	}
 
 	if (this->isPrintScreen){
-		printf("<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
+		printf("<%02d:%02d:%02d>%s[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, LOG_LEVEL_STRING[iLogLevel], fileNameBegin,line);
 		vprintf(pcContent, ap);
 		printf("\n");
 	}
@@ -71,7 +71,7 @@ bool Logger::log(LOG_LEVEL iLogLevel, const char * file, int line, const char *p
 		return false;
 	}
 
-	fprintf(pFile, "<%02d:%02d:%02d>[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, fileNameBegin,line);
+	fprintf(pFile, "<%02d:%02d:%02d>%s[%s:%d]", stTempTm.tm_hour, stTempTm.tm_min, stTempTm.tm_sec, LOG_LEVEL_STRING[iLogLevel], fileNameBegin,line);
 	vfprintf(pFile, pcContent, ap);
 	fprintf(pFile, "\n");
 
