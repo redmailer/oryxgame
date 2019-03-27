@@ -57,11 +57,6 @@ public:
 		return NULL;
 	};
 
-
-	
-	
-
-
 private:
 	PlayerMap m_mapPlayer_All;
 
@@ -72,6 +67,10 @@ private:
 	INT64 m_iAutoIncrPlayerID;
 
 };
+
+inline PlayerManager * GetPlayerManager(){
+	return dynamic_cast<PlayerManager *>(PlayerManager::getInstance())
+}
 
 
 #endif
