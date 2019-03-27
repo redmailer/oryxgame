@@ -44,10 +44,10 @@ typedef bool real, REAL;
 		static classname * initManager(classname * _type) {	\
 			if(m_singleton == NULL) {	\
 				m_singleton = _type;	\
-				TRACEINFO("initManager :%s\n",typeid(classname).name());	\
+				printf("initManager :%s\n",typeid(classname).name());	\
 			}	\
 			else{	\
-				TRACEINFO("initManager repeated:%s\n",typeid(classname).name());	\
+				printf("initManager repeated:%s\n",typeid(classname).name());	\
 			}	\
 			return m_singleton;	\
 		}
