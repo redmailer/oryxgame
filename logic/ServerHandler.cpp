@@ -55,7 +55,7 @@ bool ServerHandler::init()
 		TRACEERROR("SINGLETON_INIT(PlayerManager) failed");
 		return false;
 	}
-
+	SINGLETON_INIT(ClientConnManager);
 	ACTION_REGISTER(TestAction);
 
 	if( !SINGLETON_INIT(ThreadManager, cfgManager->io_thread_num) ){

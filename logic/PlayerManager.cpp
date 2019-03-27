@@ -123,7 +123,7 @@ bool PlayerManager::sendProtoToSession(INT64 session_id, INT32 messageID, INT32 
 	return result;
 }
 
-bool PlayerManager::sendToSession(INT64 player_id, INT32 messageID, INT32 errCode, char * msg, INT32 msgLen){
+bool PlayerManager::sendToSession(INT64 session_id, INT32 messageID, INT32 errCode, char * msg, INT32 msgLen){
 	if (session_id <= 0 || msgLen < 0 ) {
 		TRACEERROR("sendToSession failed,session_id :%ld", session_id);
 		return false;

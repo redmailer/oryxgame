@@ -23,7 +23,7 @@ public:
 	bool sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto = NULL);
 	bool sendToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, char * msg = NULL, INT32 msgLen = 0);
 	bool sendProtoToSession(INT64 session_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto = NULL);
-	bool sendToSession(INT64 player_id, INT32 messageID, INT32 errCode, char * msg = NULL, INT32 msgLen = 0);
+	bool sendToSession(INT64 session_id, INT32 messageID, INT32 errCode, char * msg = NULL, INT32 msgLen = 0);
 
 public:
 
