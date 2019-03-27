@@ -69,7 +69,7 @@ private:
 };
 
 inline PlayerManager * GetPlayerManager(){
-	return dynamic_cast<PlayerManager *>(PlayerManager::getInstance())
+	return dynamic_cast<PlayerManager *>(PlayerManager::getInstance());
 }
 
 
