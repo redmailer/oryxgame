@@ -8,6 +8,7 @@
 #include <sys/socket.h> 
 #include <string.h>
 #include <time.h>
+#include<typeinfo>
 
 #define ORYX_NEW(_type,...) new _type(__VA_ARGS__)
 #define ORYX_DEL(_param) if(_param != NULL){delete _param;}
@@ -42,6 +43,9 @@ typedef bool real, REAL;
 		static classname * initManager(classname * _type) {	\
 			if(m_singleton == NULL) {	\
 				m_singleton = _type;	\
+			}	\
+			else{	\
+				print("initManager repeated:%s",typeid(classname).name());	\
 			}	\
 			return m_singleton;	\
 		}

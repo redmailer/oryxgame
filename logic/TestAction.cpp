@@ -26,7 +26,7 @@ ActionResult TestAction::processMessage(Packet & packet, INT64 sessionID)
 	switch (packet.operatecode)
 	{
 	case MSGID_HEART_BEAT:
-		PlayerManager::getInstance()->sendProtoToSession(sessionID, packet.operatecode, 0, packet.GetRealData(), packet.GetRealDataLen());
+		//PlayerManager::getInstance()->sendProtoToSession(sessionID, packet.operatecode, 0, packet.GetRealData(), packet.GetRealDataLen());
 		break;
 	default:
 		break;
