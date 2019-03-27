@@ -8,7 +8,8 @@
 #include <sys/socket.h> 
 #include <string.h>
 #include <time.h>
-#include<typeinfo>
+#include <typeinfo>
+#include <stdio.h>
 
 #define ORYX_NEW(_type,...) new _type(__VA_ARGS__)
 #define ORYX_DEL(_param) if(_param != NULL){delete _param;}
