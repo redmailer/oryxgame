@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <iostream>
 
-extern const char* LOG_LEVEL_STRING[] = {
+const char* LOG_LEVEL_STRING[] = {
 	"[DEBG]",
 	"[INFO]",
 	"[WARN]",
