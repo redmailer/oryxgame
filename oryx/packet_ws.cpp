@@ -50,7 +50,7 @@ PacketWS* PacketWS::DecodeWsPacket(const char * data, INT32 len, INT32& error){
 }
 
 PacketWS * PacketWS::EncodeWsPacket(const char * data, INT32 len){
-    
+    return NULL;
 }
 
 PacketWS::PacketWS(){
