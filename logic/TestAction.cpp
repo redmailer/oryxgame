@@ -14,11 +14,11 @@ ActionResult TestAction::processMessage(Packet & packet, INT64 sessionID)
 
 	SessionConn * pConn = PlayerManager::getInstance()->getSession_BySessionID(sessionID);
 	if (pConn == NULL) {
-		TRACEINFO("TestAction processMessage :%s from session:%ld (but no longer exist)", MESSAGE_ID_Name((MESSAGE_ID)packet->operatecode).c_str(), sessionID);
+		TRACEINFO("TestAction processMessage :%s from session:%ld (but no longer exist)", MESSAGE_ID_Name((MESSAGE_ID)packet.operatecode).c_str(), sessionID);
 		return RESULT_SESSION_CLOSED;
 	}
 	else {
-		TRACEINFO("TestAction processMessage :%s from session:%ld playerID:%ld", MESSAGE_ID_Name((MESSAGE_ID)packet->operatecode).c_str(), sessionID, pConn->player_id);
+		TRACEINFO("TestAction processMessage :%s from session:%ld playerID:%ld", MESSAGE_ID_Name((MESSAGE_ID)packet.operatecode).c_str(), sessionID, pConn->player_id);
 	}
 
 	
@@ -26,7 +26,7 @@ ActionResult TestAction::processMessage(Packet & packet, INT64 sessionID)
 	switch (packet.operatecode)
 	{
 	case MSGID_HEART_BEAT:
-		PlayerManager::getInstance()->sendProtoToSession(sessionID, packet.operatecode, 0, packet.GetRealData(), packet.GetRealDataLen())
+		PlayerManager::getInstance()->sendProtoToSession(sessionID, packet.operatecode, 0, packet.GetRealData(), packet.GetRealDataLen());
 		break;
 	default:
 		break;
