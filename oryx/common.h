@@ -46,7 +46,7 @@ typedef bool real, REAL;
 				m_singleton = _type;	\
 			}	\
 			else{	\
-				print("initManager repeated:%s",typeid(classname).name());	\
+				printf("initManager repeated:%s",typeid(classname).name());	\
 			}	\
 			return m_singleton;	\
 		}
