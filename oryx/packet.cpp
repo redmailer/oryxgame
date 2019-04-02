@@ -137,6 +137,7 @@ Packet* Packet::WriteHead()
 	this->Write(this->version, OFFSET_VERSION);
 	this->Write(this->operatecode, OFFSET_OPERCODE);
 	this->Write(this->errorcode, OFFSET_ERRCODE);
+	this->Write(this->message_idx, OFFSET_MESSIDX);
 	return this;
 
 }
@@ -195,6 +196,7 @@ void Packet::CheckLen(INT32 len)
 	}
 
 	char* buff = new char[this->dataMaxLen];
+	memset(buff, 0 ,this->dataMaxLen);
 	if (this->dataNowLen > 0) {
 		memcpy(buff, this->data, this->dataNowLen);
 	}
