@@ -223,10 +223,9 @@ void Packet::Init()
 	this->message_idx = 0;
 	this->version = PACKET_VERSION;
 	this->dataMaxLen = 0;
-	this->dataNowLen = 0;
+	this->dataNowLen = PACKET_HEAD_LEN;
 	this->data = NULL;
 	this->WriteHead();
-
 }
 
 
