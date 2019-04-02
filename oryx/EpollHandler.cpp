@@ -499,6 +499,16 @@ bool EpollHandler::analysePacket(INT32 fd){
 					return true;
 				}
 
+				if(wsp->opcode == WS_CLOSING_FRAME){
+					delete wsp;
+					TRACEEPOLL(LOG_LEVEL_INFO, "remote ws client handshake close session:%ld",deviceInfo->session_id);
+					return false;
+				}
+				//空包不处理
+				if(wsp->payLoadLength == 0){
+					delete wsp;
+					return true;
+				}
 				INT32 * temp = (INT32 *)(wsp->payLoadData);
 				INT32 packetLen = ntohl(*temp);
 				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen != wsp->payLoadLength) {
