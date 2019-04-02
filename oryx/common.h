@@ -23,7 +23,9 @@ typedef unsigned int uint32, UINT32;
 typedef long long int64, INT64;
 typedef unsigned long long uint64, UINT64;
 
-typedef char byte, BYTE;
+typedef char byte, BYTE, INT8;
+
+typedef unsigned char UINT8;
 
 typedef bool real, REAL;
 
@@ -100,7 +102,7 @@ inline void printMemery(byte* data, INT32 len) {
 		if (i % 8 == 0) {
 			printf("\n");
 		}
-		printf("%8x", data[i]);
+		printf("%8x", (UINT8)data[i]);
 	}
 	printf("\n");
 };
