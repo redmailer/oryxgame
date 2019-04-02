@@ -509,6 +509,7 @@ bool EpollHandler::analysePacket(INT32 fd){
 				//�չ�һ������ֱ�ӽ�������
 				task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
 				pPacket->InitData(wsp->payLoadData , wsp->payLoadLength );
+				printMemery(wsp->payLoadData , wsp->payLoadLength);
 				push_task_main(pPacket);
 
 				deviceInfo->recv_begin += wsp->wspacket_len;
