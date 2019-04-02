@@ -112,7 +112,7 @@ struct DEVICE_INFO {
 					return 0;
 				}
 				memcpy(send_buffer + send_end, wsp->wspacket_data, wsp->wspacket_len);
-				send_end += size;
+				send_end += wsp->wspacket_len;
 				delete wsp;
 			}
 			break;
