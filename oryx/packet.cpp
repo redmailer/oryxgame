@@ -51,8 +51,6 @@ Packet* Packet::WriteData(void * data, INT32 len, INT32 pos)
 	}
 	CheckLen(len + pos);
 	memcpy(this->data + pos, data, len);
-	this->dataNowLen += len;
-	this->message_len += len;
 	return this;
 }
 
@@ -148,6 +146,8 @@ Packet* Packet::Append(void * data, INT32 len)
 	if (data != NULL && len > 0) {
 		this->WriteData(data, len, this->dataNowLen);
 		this->WriteHead();
+		this->dataNowLen += len;
+		this->message_len += len;
 	}
 	return this;
 }
