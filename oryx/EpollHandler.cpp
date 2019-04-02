@@ -501,7 +501,7 @@ bool EpollHandler::analysePacket(INT32 fd){
 
 				INT32 * temp = (INT32 *)(wsp->payLoadData);
 				INT32 packetLen = ntohl(*temp);
-				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen != wsp->wspacket_len) {
+				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen != wsp->payLoadLength) {
 					TRACEEPOLL(LOG_LEVEL_ERROR, "session:%ld-----doRead-----packetLen:%d illegal, wsp->wspacket_len:%d", deviceInfo->session_id, packetLen, wsp->wspacket_len);
 					delete wsp;
 					return false;
