@@ -100,7 +100,7 @@ inline void printMemery(byte* data, INT32 len) {
 		if (i % 8 == 0) {
 			printf("\n");
 		}
-		printf("%8d", data[i]);
+		printf("%8x", data[i]);
 	}
 	printf("\n");
 };
