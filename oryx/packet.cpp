@@ -146,9 +146,9 @@ Packet* Packet::Append(void * data, INT32 len)
 {
 	if (data != NULL && len > 0) {
 		this->WriteData(data, len, this->dataNowLen);
-		this->WriteHead();
 		this->dataNowLen += len;
 		this->message_len += len;
+		this->WriteHead();
 	}
 	return this;
 }
