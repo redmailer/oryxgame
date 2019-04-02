@@ -138,6 +138,9 @@ Packet* Packet::WriteHead()
 	this->Write(this->operatecode, OFFSET_OPERCODE);
 	this->Write(this->errorcode, OFFSET_ERRCODE);
 	this->Write(this->message_idx, OFFSET_MESSIDX);
+	if(this->dataNowLen == 0){
+		this->dataNowLen = this->message_len;
+	}
 	return this;
 
 }
@@ -223,7 +226,7 @@ void Packet::Init()
 	this->message_idx = 0;
 	this->version = PACKET_VERSION;
 	this->dataMaxLen = 0;
-	this->dataNowLen = PACKET_HEAD_LEN;
+	this->dataNowLen = 0;
 	this->data = NULL;
 	this->WriteHead();
 }
