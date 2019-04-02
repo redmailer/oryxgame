@@ -399,11 +399,11 @@ bool EpollHandler::doRead(INT32 fd)
 					deviceInfo->proto_type = PROTO_WEBSOCKET;
 					deviceInfo->recv_begin = deviceInfo->recv_end;
 					result = doWrite(deviceInfo->fd);
-					TRACEEPOLL(LOG_LEVEL_ERROR,"session:%ld set prototype:PROTO_WEBSOCKET",deviceInfo->session_id);
+					TRACEEPOLL(LOG_LEVEL_INFO,"session:%ld set prototype:PROTO_WEBSOCKET",deviceInfo->session_id);
 					break;
 				}else{
 					deviceInfo->proto_type = PROTO_ORYX;
-					TRACEEPOLL(LOG_LEVEL_ERROR,"session:%ld set prototype:PROTO_ORYX",deviceInfo->session_id);
+					TRACEEPOLL(LOG_LEVEL_INFO,"session:%ld set prototype:PROTO_ORYX",deviceInfo->session_id);
 				}
 			}
 

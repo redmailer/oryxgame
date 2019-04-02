@@ -40,7 +40,7 @@ ActionResult MessageHandler::processMessage(void * paramMessage)
 	}
 
 	Action * action = it_action->second;
-
+	TRACEDEBUG("processMessage debug messageid :%d from session:%ld",pPacket->operatecode, pConnMsg->session_id, pPacket->GetRealDataLen());
 	ActionResult result = action->processMessage(*pPacket, pConnMsg->session_id);
 
 	//������첽�ȴ��У���ɾ��
