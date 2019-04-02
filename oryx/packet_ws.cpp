@@ -50,7 +50,33 @@ PacketWS* PacketWS::DecodeWsPacket(const char * data, INT32 len, INT32& error){
 }
 
 PacketWS * PacketWS::EncodeWsPacket(const char * data, INT32 len){
-    return NULL;
+    if(len < 0){
+        return NULL;
+    }
+    INT32 realDatalen = len + 2;
+    if(len >= 126){
+        len += 2;
+    }
+    PacketWS* wsp = new PacketWS();
+    wsp->wspacket_data = new char[realDatalen];
+    memset(wsp->wspacket_data, 0 , realDatalen)
+    wsp->wspacket_len = realDatalen;
+
+    //fin,rsv,opcode
+    wsp->wspacket_data[0] |= 0x82;
+    //mask=0,payloadLen
+    if(len < 126){
+        wsp->wspacket_data[1] = len;
+        if(len > 0){
+            memcpy(wsp->wspacket_data + 2, data, len);
+        }
+    }else{
+        wsp->wspacket_data[1] = 126;
+        *(UINT16)(wsp->wspacket_data + 2) = len;
+        memcpy(wsp->wspacket_data + 4, data, len);
+    }
+
+    return wsp;
 }
 
 PacketWS::PacketWS(){

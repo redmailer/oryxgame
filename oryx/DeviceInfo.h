@@ -5,6 +5,7 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include "LogManager.h"
+#include "packet_ws.h"
 using namespace std;
 
 enum DEVICE_TYPE {
@@ -101,13 +102,24 @@ struct DEVICE_INFO {
 		
 		switch(this->proto_type){
 			case PROTO_WEBSOCKET:{
-				
+				PacketWS* wsp = PacketWS::EncodeWsPacket(data, size);
+				if(wsp == NULL){
+					TRACEEPOLL(LOG_LEVEL_ERROR, "session %ld write failed,data too long", session_id);
+				}
+				if (MAX_SEND_BUFFER_LEN - this->send_end < size ) {
+					TRACEEPOLL(LOG_LEVEL_ERROR, "session %ld write failed,data too long", session_id);
+					delete wsp;
+					return 0;
+				}
+				memcpy(send_buffer + send_end, wsp->wspacket_data, wsp->wspacket_len);
+				send_end += size;
+				delete wsp;
 			}
 			break;
 
 			default: {
 				if (MAX_SEND_BUFFER_LEN - this->send_end < size ) {
-					TRACEEPOLL(LOG_LEVEL_WARN, "session %ld write failed,data too long", session_id);
+					TRACEEPOLL(LOG_LEVEL_ERROR, "session %ld write failed,data too long", session_id);
 					return 0;
 				}
 				memcpy(send_buffer + send_end, data, size);
