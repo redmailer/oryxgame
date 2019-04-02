@@ -59,7 +59,7 @@ PacketWS * PacketWS::EncodeWsPacket(const char * data, INT32 len){
     }
     PacketWS* wsp = new PacketWS();
     wsp->wspacket_data = new char[realDatalen];
-    memset(wsp->wspacket_data, 0 , realDatalen)
+    memset(wsp->wspacket_data, 0 , realDatalen);
     wsp->wspacket_len = realDatalen;
 
     //fin,rsv,opcode
@@ -72,7 +72,7 @@ PacketWS * PacketWS::EncodeWsPacket(const char * data, INT32 len){
         }
     }else{
         wsp->wspacket_data[1] = 126;
-        *(UINT16)(wsp->wspacket_data + 2) = len;
+        *(UINT16 *)(wsp->wspacket_data + 2) = len;
         memcpy(wsp->wspacket_data + 4, data, len);
     }
 
