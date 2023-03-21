@@ -11,7 +11,7 @@ AUX_SOURCE_DIRECTORY(./oryx ORYX_DIR_SRCS)
 AUX_SOURCE_DIRECTORY(./task TASK_DIR_SRCS)
 
 
-#SET(CPP_COMPILE_OPT," -g -Wall -pthread -lstdc++ -std=c++11 ")
+SET(CPP_COMPILE_OPT," -g -Wall -pthread -lstdc++ -std=c++11 ")
 add_executable(OryxServer ${LOGIC_DIR_SRCS} ${ORYX_DIR_SRCS} ${TASK_DIR_SRCS})
 
 
