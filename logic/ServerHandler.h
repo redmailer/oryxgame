@@ -4,23 +4,21 @@
 #include "../oryx/common.h"
 #include "../oryx/TimerControl.h"
 
-class ServerHandler : TimerControl {
-	SINGLETON_DECLEAR(ServerHandler)
+class ServerHandler : TimerControl
+{
+    SINGLETON_DECLEAR(ServerHandler)
 public:
+    bool init();
 
-	bool init();
+    bool signalIgnore();
 
-	bool signalIgnore();
+    bool setDaemonProcess();
 
-	bool setDaemonProcess();
+    void run();
 
-	void run();
-
-	
-public :
-	static void update_1s(INT64 time_MilliSec);
-	static void update_2s(INT64 time_MilliSec);
-
+public:
+    static void update_1s(INT64 time_MilliSec);
+    static void update_2s(INT64 time_MilliSec);
 };
 
 #endif

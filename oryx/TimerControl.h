@@ -1,40 +1,38 @@
 #ifndef __TIMER_CONTROL__
 #define __TIMER_CONTROL__
 
-#include<iostream>
+#include <iostream>
 #include <sys/time.h>
 #include "common.h"
-#include<vector>
+#include <vector>
 
 typedef struct timeval TIMEVAL;
 
 typedef void (*_TIMERVAL_FUN_)(INT64);
 
-struct TimerFunInfo {
-	_TIMERVAL_FUN_  timeval_fun;
-	INT64  interval;		/*ºÁÃë*/
-	INT64 lastRunTime;		/*ºÁÃë*/
+struct TimerFunInfo
+{
+    _TIMERVAL_FUN_ timeval_fun;
+    INT64 interval;    /*ï¿½ï¿½ï¿½ï¿½*/
+    INT64 lastRunTime; /*ï¿½ï¿½ï¿½ï¿½*/
 };
 
-
-class TimerControl {
+class TimerControl
+{
 
 public:
-	TimerControl();
-	~TimerControl() {};
+    TimerControl();
+    ~TimerControl(){};
 
-	virtual INT32 update();
+    virtual INT32 update();
 
-	void register_timerFun(_TIMERVAL_FUN_ _fun, INT64 interval /*ºÁÃë*/ );
-
+    void register_timerFun(_TIMERVAL_FUN_ _fun, INT64 interval /*ï¿½ï¿½ï¿½ï¿½*/);
 
 private:
-	TIMEVAL m_lastRunTime;		// ÉÏÒ»Ö¡ÔËÐÐÊ±¼ä £¨ºÁÃë£©
-	TIMEVAL m_nowTime;			// £¨ºÁÃë£©
+    TIMEVAL m_lastRunTime; // ï¿½ï¿½Ò»Ö¡ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ë£©
+    TIMEVAL m_nowTime;     // ï¿½ï¿½ï¿½ï¿½ï¿½ë£©
 
-	std::vector<TimerFunInfo *>  m_vecTimerFun;
-
+    std::vector<TimerFunInfo *> m_vecTimerFun;
 };
-
 
 #endif

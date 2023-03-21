@@ -7,83 +7,81 @@
 #include "task.h"
 #include "spsc_queue.h"
 
-#define MAX_SPSC_QUEUE_SIZE			40960
-#define MAX_HANDLER_SIZE_PERFRAME   1024
+#define MAX_SPSC_QUEUE_SIZE 40960
+#define MAX_HANDLER_SIZE_PERFRAME 1024
 
 typedef void *(*_thread_fun_)(void *);
 
-class Thread  {
+class Thread
+{
 public:
+    Thread(_thread_fun_ fun, void *param = NULL);
+    INT64 thread_id; // ï¿½ß³ï¿½id
+    void *param;     // ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	Thread(_thread_fun_ fun, void * param = NULL);
-	INT64 thread_id;			//Ïß³Ìid
-	void * param;			//Ïß³ÌÆô¶¯²ÎÊý
-
-	bool run();
+    bool run();
 
 private:
-	_thread_fun_ thread_fun;
+    _thread_fun_ thread_fun;
 
-	INT32 m_pressure;	//·ºÑ¹Á¦Öµ
-
-public:
-	inline void resetThreadFun(_thread_fun_ fun) { this->thread_fun = fun; };
-	inline INT64 getThreadID() { return this->thread_id; };
-	inline void setParam(void * data) { this->param = data; }
-
-	inline void addPressure(INT32 addNum) { m_pressure += addNum; }
-	inline INT32 getPressure() { return m_pressure; }
-
-	INT32 update_thread();	//×ÔÉíÏß³Ìµ÷ÓÃ
-	INT32 update_main();	//Âß¼­Ïß³Ìµ÷ÓÃ
-
-	INT32 handlerTask_main();				//Âß¼­Ïß³Ìµ÷ÓÃ
-	INT32 handlerTask_main_complete();		//Âß¼­Ïß³Ìµ÷ÓÃ
-
-	INT32 handlerTask_thread();				//×ÔÉíÏß³Ìµ÷ÓÃ
-	INT32 handlerTask_thread_complete();	//×ÔÉíÏß³Ìµ÷ÓÃ
-
-	virtual void dotask(tagThreadTaskNode & node) ;
-	virtual void dotask_complete(tagThreadTaskNode & node) ;
+    INT32 m_pressure; // ï¿½ï¿½Ñ¹ï¿½ï¿½Öµ
 
 public:
-	template<typename _Ty>
-	inline void push_task_thread(_Ty *pTask){
-		tagThreadTaskNode node;
-		node.pExcute = _Ty::OnExcute;
-		node.pCompleted = _Ty::OnComplete;
-		node.pGetTaskType = _Ty::getTaskType;
-		node.pGetThreadID = _Ty::getThreadID;
-		node.pTask = (void*)pTask;
+    inline void resetThreadFun(_thread_fun_ fun) { this->thread_fun = fun; };
+    inline INT64 getThreadID() { return this->thread_id; };
+    inline void setParam(void *data) { this->param = data; }
 
-		m_queue_thread.push(node);
-	}
+    inline void addPressure(INT32 addNum) { m_pressure += addNum; }
+    inline INT32 getPressure() { return m_pressure; }
 
-	template<typename _Ty>
-	inline void push_task_main(_Ty *pTask) {
-		tagThreadTaskNode node;
-		node.pExcute = _Ty::OnExcute;
-		node.pCompleted = _Ty::OnComplete;
-		node.pGetTaskType = _Ty::getTaskType;
-		node.pGetThreadID = _Ty::getThreadID;
-		node.pTask = (void*)pTask;
+    INT32 update_thread(); // ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
+    INT32 update_main();   // ï¿½ß¼ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
 
-		m_queue_main.push(node);
-	}
+    INT32 handlerTask_main();          // ï¿½ß¼ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
+    INT32 handlerTask_main_complete(); // ï¿½ß¼ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
+
+    INT32 handlerTask_thread();          // ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
+    INT32 handlerTask_thread_complete(); // ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½
+
+    virtual void dotask(tagThreadTaskNode &node);
+    virtual void dotask_complete(tagThreadTaskNode &node);
+
+public:
+    template <typename _Ty>
+    inline void push_task_thread(_Ty *pTask)
+    {
+        tagThreadTaskNode node;
+        node.pExcute = _Ty::OnExcute;
+        node.pCompleted = _Ty::OnComplete;
+        node.pGetTaskType = _Ty::getTaskType;
+        node.pGetThreadID = _Ty::getThreadID;
+        node.pTask = (void *)pTask;
+
+        m_queue_thread.push(node);
+    }
+
+    template <typename _Ty>
+    inline void push_task_main(_Ty *pTask)
+    {
+        tagThreadTaskNode node;
+        node.pExcute = _Ty::OnExcute;
+        node.pCompleted = _Ty::OnComplete;
+        node.pGetTaskType = _Ty::getTaskType;
+        node.pGetThreadID = _Ty::getThreadID;
+        node.pTask = (void *)pTask;
+
+        m_queue_main.push(node);
+    }
 
 protected:
+    spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_thread;          // Í¶ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ñ¹Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½È¡)
+    spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_thread_complete; // Í¶ï¿½ï¿½-ï¿½ØµÝ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ñ¹Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½È¡ï¿½ï¿½
 
-	spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_thread;				//Í¶Èë(±ðµÄÏß³ÌÑ¹Õ»£¬×ÔÉíÏß³ÌÈ¡)
-	spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_thread_complete;		//Í¶³ö-»ØµÝ£¨×ÔÉíÏß³ÌÑ¹Õ»£¬±ðµÄÏß³ÌÈ¡£©
+    spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_main;          // Í¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ñ¹Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½È¡ï¿½ï¿½
+    spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_main_complete; // Í¶ï¿½ï¿½-ï¿½Øµï¿½(ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ñ¹Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½È¡)
 
-	spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_main;				//Í¶³ö£¨×ÔÉíÏß³ÌÑ¹Õ»£¬±ðµÄÏß³ÌÈ¡£©
-	spsc_queue<tagThreadTaskNode, MAX_SPSC_QUEUE_SIZE> m_queue_main_complete;		//Í¶Èë-»ØµÝ(±ðµÄÏß³ÌÑ¹Õ»£¬×ÔÉíÏß³ÌÈ¡)
-
-	tagThreadTaskNode m_obj_thread;
-	tagThreadTaskNode m_obj_main;
-
+    tagThreadTaskNode m_obj_thread;
+    tagThreadTaskNode m_obj_main;
 };
-
-
 
 #endif

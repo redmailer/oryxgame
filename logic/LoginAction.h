@@ -1,17 +1,16 @@
 #ifndef __ACTION_LOGIN__
 #define __ACTION_LOGIN__
 
-
 #include "../oryx/Action.h"
 
-class LoginAction : public Action {
+class LoginAction : public Action
+{
 public:
-	LoginAction() {};
+    LoginAction(){};
 
 public:
-	ActionResult processMessage(Packet * packet, INT64 sessionID);
-	void initAction();
+    ActionResult processMessage(Packet *packet, INT64 sessionID);
+    void initAction();
 };
-
 
 #endif

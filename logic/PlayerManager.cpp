@@ -1,119 +1,126 @@
 #include "PlayerManager.h"
 #include "../proto/pb/messageID.pb.h"
 #include "../oryx/packet.h"
-PlayerManager::PlayerManager() {};
-
-
+PlayerManager::PlayerManager(){};
 
 bool PlayerManager::init()
 {
-	m_iAutoIncrPlayerID = 1001;
-	ClientConnManager::init();
-	return true;
+    m_iAutoIncrPlayerID = 1001;
+    ClientConnManager::init();
+    return true;
 }
 
-void PlayerManager::onSessionClose(SessionConn * pConn)
+void PlayerManager::onSessionClose(SessionConn *pConn)
 {
-	if (pConn && pConn->player_id > 0) {
-		onPlayerLogoff(pConn->player_id);
-	}
-	return;
+    if (pConn && pConn->player_id > 0)
+    {
+        onPlayerLogoff(pConn->player_id);
+    }
+    return;
 }
 
-INT32 PlayerManager::onPlayerLogin(INT64 player_id, SessionConn * pConn)
+INT32 PlayerManager::onPlayerLogin(INT64 player_id, SessionConn *pConn)
 {
-	if (player_id <= 0 || pConn == NULL) {
-		TRACEERROR("onPlayerLogin failed player:%ld", player_id);
-		return Proto::RESULT_LOGIN_NOEXIST;
-	}
+    if (player_id <= 0 || pConn == NULL)
+    {
+        TRACEERROR("onPlayerLogin failed player:%ld", player_id);
+        return Proto::RESULT_LOGIN_NOEXIST;
+    }
 
-	//²»ÄÜÖØ¸´µÇÂ¼
-	if (pConn->player_id == player_id) {
-		TRACEWARN("onPlayerLogin repeated player:%ld", player_id);
-		return Proto::RESULT_LOGIN_REPEATED;
-	}
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Â¼
+    if (pConn->player_id == player_id)
+    {
+        TRACEWARN("onPlayerLogin repeated player:%ld", player_id);
+        return Proto::RESULT_LOGIN_REPEATED;
+    }
 
-	Player * pPlayer = getPlayer(player_id);
-	if (pPlayer == NULL){
-		TRACEERROR("onPlayerLogin failed cannot find player:%ld ", player_id);
-		//Íæ¼Ò²»´æÔÚ£¬¼ÇµÃ·µ»Ø´íÎó
-		return Proto::RESULT_LOGIN_NOEXIST;
-	}
+    Player *pPlayer = getPlayer(player_id);
+    if (pPlayer == NULL)
+    {
+        TRACEERROR("onPlayerLogin failed cannot find player:%ld ", player_id);
+        // ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ÇµÃ·ï¿½ï¿½Ø´ï¿½ï¿½ï¿½
+        return Proto::RESULT_LOGIN_NOEXIST;
+    }
 
-	//ÒìµØµÇÂ¼ ´¦Àí
-	INT64 oldSession_id = 0;
-	SessionConn * pOldConn = getPlayerSession(player_id);
-	if (pOldConn != NULL) {
-		//ÕâÀï²»ÅÐ¶ÏpOldConn µÄ player_id¡£Èç¹ûÊÇ´íµÄ£¬Ò²Ó¦¸ÃÈÃËûÏÂÏß
-		pOldConn->player_id = 0;
-		oldSession_id = pOldConn->session_id;
-	}
-	pConn->player_id = player_id;
-	m_mapAllPlayer_Online[player_id] = pConn;
-	TRACEINFO("onPlayerLogin player_id:%ld session_id:%ld old_session_id:%ld", player_id, pConn->session_id, oldSession_id);
-	//´¦ÀíÍæ¼ÒµÇÂ¼µÄÊý¾Ý²¢·µ»Ø
+    // ï¿½ï¿½Øµï¿½Â¼ ï¿½ï¿½ï¿½ï¿½
+    INT64 oldSession_id = 0;
+    SessionConn *pOldConn = getPlayerSession(player_id);
+    if (pOldConn != NULL)
+    {
+        // ï¿½ï¿½ï¿½ï²»ï¿½Ð¶ï¿½pOldConn ï¿½ï¿½ player_idï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½Ä£ï¿½Ò²Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        pOldConn->player_id = 0;
+        oldSession_id = pOldConn->session_id;
+    }
+    pConn->player_id = player_id;
+    m_mapAllPlayer_Online[player_id] = pConn;
+    TRACEINFO("onPlayerLogin player_id:%ld session_id:%ld old_session_id:%ld", player_id, pConn->session_id, oldSession_id);
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	return Proto::RESULT_SUCCESS;
-
+    return Proto::RESULT_SUCCESS;
 }
 
 void PlayerManager::onPlayerLogoff(INT64 player_id)
 {
-	SessionConn * pConn = getPlayerSession(player_id);
-	INT64 session_id = 0;
-	if (pConn != NULL) {
-		pConn->player_id = 0;
-		m_mapAllPlayer_Online.erase(player_id);
-		session_id = pConn->session_id;
-	}
-	TRACEINFO("onPlayerLogoff player_id:%ld session_id:%ld", player_id, session_id);
-	
-	//´¦ÀíÍæ¼ÒÏÂÏß
+    SessionConn *pConn = getPlayerSession(player_id);
+    INT64 session_id = 0;
+    if (pConn != NULL)
+    {
+        pConn->player_id = 0;
+        m_mapAllPlayer_Online.erase(player_id);
+        session_id = pConn->session_id;
+    }
+    TRACEINFO("onPlayerLogoff player_id:%ld session_id:%ld", player_id, session_id);
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
-bool PlayerManager::sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto)
+bool PlayerManager::sendProtoToPlayer(INT64 player_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message *proto)
 {
-	if (player_id <= 0 ) {
-		TRACEERROR("sendProtoToPlayer failed,player_id :%ld", player_id);
-		return false;
-	}
-	SessionConn * pConn = getPlayerSession(player_id);
-	if (pConn == NULL) {
-		return false;
-	}
-	
-	return sendProtoToSession(pConn->session_id, messageID, errCode, proto);
+    if (player_id <= 0)
+    {
+        TRACEERROR("sendProtoToPlayer failed,player_id :%ld", player_id);
+        return false;
+    }
+    SessionConn *pConn = getPlayerSession(player_id);
+    if (pConn == NULL)
+    {
+        return false;
+    }
 
+    return sendProtoToSession(pConn->session_id, messageID, errCode, proto);
 }
 
-bool PlayerManager::sendProtoToSession(INT64 session_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto)
+bool PlayerManager::sendProtoToSession(INT64 session_id, INT32 messageID, INT32 errCode, ::google::protobuf::Message *proto)
 {
-	if (session_id <= 0  ) {
-		TRACEERROR("sendProtoToSession failed,session_id :%ld", session_id);
-		return false;
-	}
+    if (session_id <= 0)
+    {
+        TRACEERROR("sendProtoToSession failed,session_id :%ld", session_id);
+        return false;
+    }
 
-	Packet* pPack = Packet::NewPacket(messageID, errCode);
-	if (pPack == NULL) {
-		TRACEERROR("sendProtoToSession failed,session_id :%ld,NewPacket failed", session_id);
-		return false;
-	}
+    Packet *pPack = Packet::NewPacket(messageID, errCode);
+    if (pPack == NULL)
+    {
+        TRACEERROR("sendProtoToSession failed,session_id :%ld,NewPacket failed", session_id);
+        return false;
+    }
 
-	if (proto != NULL) {
-		INT32 sendLen = proto->ByteSize();
-		char buff[sendLen];
+    if (proto != NULL)
+    {
+        INT32 sendLen = proto->ByteSize();
+        char buff[sendLen];
 
-		if (sendLen <= 0 || proto->SerializeToArray(buff, sendLen)) {
-			TRACEERROR("proto->SerializeToArray failed,session_id :%ld messageID:%d errCode:%d", session_id, messageID, errCode);
-			ORYX_DEL(pPack);
-			return false;
-		}
-		pPack->Append(buff, sendLen);
+        if (sendLen <= 0 || proto->SerializeToArray(buff, sendLen))
+        {
+            TRACEERROR("proto->SerializeToArray failed,session_id :%ld messageID:%d errCode:%d", session_id, messageID, errCode);
+            ORYX_DEL(pPack);
+            return false;
+        }
+        pPack->Append(buff, sendLen);
+    }
 
-	}
-	
-	bool Result = sendMsgToConn(session_id, pPack->data, pPack->message_len);
-	ORYX_DEL(pPack);
+    bool Result = sendMsgToConn(session_id, pPack->data, pPack->message_len);
+    ORYX_DEL(pPack);
 
-	return Result;
+    return Result;
 }

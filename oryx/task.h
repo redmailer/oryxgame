@@ -1,76 +1,77 @@
 #ifndef __TASK__
 #define __TASK__
 
-//taskµÄÄÚ´æ¹ÜÀí£ºË­²úÉú£¬Ë­»ØÊÕ
+// taskï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë­ï¿½ï¿½ï¿½ï¿½
 
 #include "../oryx/common.h"
 
-enum TASK_TYPE {
+enum TASK_TYPE
+{
 
-	TASK_TYPE_NONE = 0,
-	TASK_TYPE_LISTENER = 1,				//Âß¼­Ïß³Ì Í¨Öª epollÏß³Ì £¬ÐÂµÄ¼àÌý
-	TASK_TYPE_CLIENTCONN = 2,			//epollÏß³Ì Í¨Öª Âß¼­Ïß³Ì £¬connÁ¬½Ó
-	TASK_TYPE_CLIENTCONN_INSERT = 3,	//Âß¼­Ïß³Ì Í¨Öª epollÏß³Ì £¬²åÈëconn
-	TASK_TYPE_CLIENTCONN_DELETE = 4,	//Âß¼­Ïß³Ì Í¨Öª epollÏß³Ì £¬É¾³ýconn
-	TASK_TYPE_CLIENTCONN_ONCLOSE = 5,	//epollÏß³Ì Í¨Öª Âß¼­Ïß³Ì £¬conn¶Ï¿ª
-	TASK_TYPE_CLIENTCONN_PACKET = 6,	//½ÓÊÕ
-	TASK_TYPE_SEND_PACKET = 7,			//·¢ËÍ
+    TASK_TYPE_NONE = 0,
+    TASK_TYPE_LISTENER = 1,           // ï¿½ß¼ï¿½ï¿½ß³ï¿½ Í¨Öª epollï¿½ß³ï¿½ ï¿½ï¿½ï¿½ÂµÄ¼ï¿½ï¿½ï¿½
+    TASK_TYPE_CLIENTCONN = 2,         // epollï¿½ß³ï¿½ Í¨Öª ï¿½ß¼ï¿½ï¿½ß³ï¿½ ï¿½ï¿½connï¿½ï¿½ï¿½ï¿½
+    TASK_TYPE_CLIENTCONN_INSERT = 3,  // ï¿½ß¼ï¿½ï¿½ß³ï¿½ Í¨Öª epollï¿½ß³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½conn
+    TASK_TYPE_CLIENTCONN_DELETE = 4,  // ï¿½ß¼ï¿½ï¿½ß³ï¿½ Í¨Öª epollï¿½ß³ï¿½ ï¿½ï¿½É¾ï¿½ï¿½conn
+    TASK_TYPE_CLIENTCONN_ONCLOSE = 5, // epollï¿½ß³ï¿½ Í¨Öª ï¿½ß¼ï¿½ï¿½ß³ï¿½ ï¿½ï¿½connï¿½Ï¿ï¿½
+    TASK_TYPE_CLIENTCONN_PACKET = 6,  // ï¿½ï¿½ï¿½ï¿½
+    TASK_TYPE_SEND_PACKET = 7,        // ï¿½ï¿½ï¿½ï¿½
 
 };
 
-template<class _Ty, TASK_TYPE TASKTYPE >
+template <class _Ty, TASK_TYPE TASKTYPE>
 struct Task
 {
-	static void OnExcute(void *pTask)
-	{
-		_Ty *pThis = (_Ty *)pTask;
-		pThis->on_thread_call();
-	}
+    static void OnExcute(void *pTask)
+    {
+        _Ty *pThis = (_Ty *)pTask;
+        pThis->on_thread_call();
+    }
 
-	static void OnComplete(void *pTask)
-	{
-		_Ty *pThis = (_Ty *)pTask;
-		pThis->on_main_call();
-		pThis->on_free();
-	}
+    static void OnComplete(void *pTask)
+    {
+        _Ty *pThis = (_Ty *)pTask;
+        pThis->on_main_call();
+        pThis->on_free();
+    }
 
-	static INT64 getThreadID(void *pTask)
-	{
-		_Ty *pThis = (_Ty *)pTask;
-		return pThis->m_thrdID;
-	}
+    static INT64 getThreadID(void *pTask)
+    {
+        _Ty *pThis = (_Ty *)pTask;
+        return pThis->m_thrdID;
+    }
 
-	static TASK_TYPE getTaskType(void *pTask)
-	{
-		_Ty *pThis = (_Ty *)pTask;
-		return pThis->m_taskType;
-	}
+    static TASK_TYPE getTaskType(void *pTask)
+    {
+        _Ty *pThis = (_Ty *)pTask;
+        return pThis->m_taskType;
+    }
 
-	Task(INT64 thrdID) {
-		this->m_thrdID = thrdID;
-		this->m_taskType = TASKTYPE;
-	}
+    Task(INT64 thrdID)
+    {
+        this->m_thrdID = thrdID;
+        this->m_taskType = TASKTYPE;
+    }
 
-	INT64 m_thrdID;
-	TASK_TYPE m_taskType;
+    INT64 m_thrdID;
+    TASK_TYPE m_taskType;
 
-	void on_thread_call();
-	void on_main_call();
-	void on_free();
+    void on_thread_call();
+    void on_main_call();
+    void on_free();
 };
 
-typedef void (task_node_funPtr) (void *);
-typedef INT64 (task_node_GetThreadID) (void *);
-typedef TASK_TYPE (task_node_GetTaskType) (void *);
+typedef void(task_node_funPtr)(void *);
+typedef INT64(task_node_GetThreadID)(void *);
+typedef TASK_TYPE(task_node_GetTaskType)(void *);
 
 struct tagThreadTaskNode
 {
-	void *pTask;
-	task_node_funPtr *pExcute;			//Ö´ÐÐº¯Êý
-	task_node_funPtr *pCompleted;		//Íê³Éº¯Êý
-	task_node_GetTaskType *pGetTaskType;
-	task_node_GetThreadID *pGetThreadID;
-
+    void *pTask;
+    task_node_funPtr *pExcute;    // Ö´ï¿½Ðºï¿½ï¿½ï¿½
+    task_node_funPtr *pCompleted; // ï¿½ï¿½Éºï¿½ï¿½ï¿½
+    task_node_GetTaskType *pGetTaskType;
+    task_node_GetThreadID *pGetThreadID;
 };
 
 #endif

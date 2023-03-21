@@ -5,18 +5,15 @@
 
 #define MAX_PLAYER_NAME_LEN 128
 
-
-class Player {
-
-public:
-	Player() {};
+class Player
+{
 
 public:
-	INT64 playerID;
-	char name[MAX_PLAYER_NAME_LEN];
+    Player(){};
 
+public:
+    INT64 playerID;
+    char name[MAX_PLAYER_NAME_LEN];
 };
-
-
 
 #endif

@@ -8,18 +8,18 @@ using namespace std;
 
 void task_clientConnPacket::on_thread_call()
 {
-	MessageHandler::getInstance()->processMessage(this);
+    MessageHandler::getInstance()->processMessage(this);
 }
 
 void task_clientConnPacket::on_main_call()
 {
-	
 }
 
 void task_clientConnPacket::on_free()
 {
-	if (this->data_packet != NULL) {
-		delete[] data_packet;
-	}
-	ORYX_DEL(this);
+    if (this->data_packet != NULL)
+    {
+        delete[] data_packet;
+    }
+    ORYX_DEL(this);
 }
