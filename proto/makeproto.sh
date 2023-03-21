@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# 
 for file in ./pb/*
 do
 	if test -f $file

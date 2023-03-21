@@ -17,6 +17,5 @@ for /f "delims=" %%a in ('dir  /a-d/b %SOURCE_PATH%\*.proto' ) do (
 
 echo.
 echo.
-echo.
 echo done
 pause
