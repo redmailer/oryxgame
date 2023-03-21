@@ -10,6 +10,7 @@ enum ActionResult {
 	RESULT_UNKNOWNMESSAGE = 2,
 	RESULT_PARSEERROR = 3,
 	RESULT_SESSION_CLOSED = 4,
+    RESULT_MAX,
 };
 
 #define ACTION_REGISTER(ActionType)  ActionType * act = new ActionType();act->initAction();

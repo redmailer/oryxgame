@@ -95,9 +95,9 @@ bool EpollHandler::CreateEpoll()
 
 bool EpollHandler::EpollRegister(INT32 fd, INT32 eventtype /*= EPOLLIN | EPOLLET*/)
 {
-	struct epoll_event ev;              //ÊÂ¼þÁÙÊ±±äÁ¿
+	struct epoll_event ev;              //äº‹ä»¶ä¸´æ—¶å˜é‡
 	ev.data.fd = fd;
-	ev.events = eventtype;				//EPOLLET ±ßÔµ    EPOLLLTË®Æ½
+	ev.events = eventtype;				//EPOLLET è¾¹ç¼˜    EPOLLLTæ°´å¹³
 
 	setnonblocking(fd);
 
@@ -114,7 +114,7 @@ bool EpollHandler::EpollRegister(INT32 fd, INT32 eventtype /*= EPOLLIN | EPOLLET
 
 void EpollHandler::EpollRemove(INT32 fd)
 {
-	struct epoll_event ev;              //ÊÂ¼þÁÙÊ±±äÁ¿
+	struct epoll_event ev;              //äº‹ä»¶ä¸´æ—¶å˜é‡
 	ev.data.fd = fd;
 
 	int ret = epoll_ctl(epfd, EPOLL_CTL_DEL, fd, &ev);
@@ -198,7 +198,7 @@ void EpollHandler::WritePacketToConn(tagThreadTaskNode & node)
 		result = doWrite(deviceInfo->fd);
 	}
 
-	//·¢ËÍÊ§°Ü£¬¶Ïµôsocket
+	//ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ïµï¿½socket
 	if (result == false) {
 		task_clientConnOnClose * pConnClose = ORYX_NEW( task_clientConnOnClose,getThreadID(), deviceInfo->session_id);
 		push_task_main(pConnClose);
@@ -349,7 +349,7 @@ bool EpollHandler::doRead(INT32 fd)
 	//int retry = 0;
 
 	do {
-		//Êý¾Ý»º´æÇ°ÒÆ£¬¿Õ³öºóÃæµÄsession»º³åÇø
+		//ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½Ç°ï¿½Æ£ï¿½ï¿½Õ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sessionï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		deviceInfo->clear_Recv_buff();
 
 		recvNum = ::recv(
@@ -366,7 +366,7 @@ bool EpollHandler::doRead(INT32 fd)
 			else if (iErrorNo == EWOULDBLOCK) {	//
 				break;
 			}
-			else if (iErrorNo == EINTR) {	//ÊÕÍêÁË
+			else if (iErrorNo == EINTR) {	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				break;
 			}
 			else {
@@ -375,30 +375,30 @@ bool EpollHandler::doRead(INT32 fd)
 			}
 			
 		}
-		else if (recvNum == 0) {			//³ö´íÁË
+		else if (recvNum == 0) {			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			result = false;
 			break;
 		}
 		else {
 			deviceInfo->recv_end += recvNum;
-			//Ç°ËÄ¸ö×Ö½Ú´ú±íÕû¸ö°üµÄ³¤¶È£¬ÖÁÉÙÊÕ4¸ö×Ö½ÚÔÙ¿ªÊ¼½â°ü
+			//Ç°ï¿½Ä¸ï¿½ï¿½Ö½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½ï¿½ï¿½Ö½ï¿½ï¿½Ù¿ï¿½Ê¼ï¿½ï¿½ï¿½
 			while (deviceInfo->recv_end - deviceInfo->recv_begin > 4 ) {
 				INT32 * temp = (INT32 *)(deviceInfo->recv_buffer + deviceInfo->recv_begin);
 				INT32 packetLen = ntohl(*temp);
 
-				//°üÌ«´ó »òÕß ³¤¶È´íÎó£¬²»ÊÕÁË£¬Ö±½Ó¶Ï¿ª
+				//ï¿½ï¿½Ì«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½È´ï¿½ï¿½ó£¬²ï¿½ï¿½ï¿½ï¿½Ë£ï¿½Ö±ï¿½Ó¶Ï¿ï¿½
 				if (packetLen > MAX_RECV_BUFFER_LEN || packetLen < 4) {
 					TRACEEPOLL(LOG_LEVEL_ERROR, "session:%ld-----doRead-----packetLen:%d illegal", deviceInfo->session_id, packetLen);
 					result = false;
 					break;
 				}
 
-				//Ò»¸ö°üÃ»ÊÕÂú£¬²»½â°ü£¬¼ÌÐøÊÕ
+				//Ò»ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				if (packetLen > deviceInfo->recv_end - deviceInfo->recv_begin) {
 					break;
 				}
 
-				//ÊÕ¹»Ò»¸ö°ü£¬Ö±½Ó½âÎö³öÀ´
+				//ï¿½Õ¹ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				//Packet* packet = Packet::NewPacket(deviceInfo->recv_buffer + deviceInfo->recv_begin, packetLen);
 				task_clientConnPacket * pPacket = ORYX_NEW(task_clientConnPacket,getThreadID(), deviceInfo->session_id);
 				pPacket->InitData(deviceInfo->recv_buffer + deviceInfo->recv_begin , packetLen );
@@ -441,13 +441,13 @@ bool EpollHandler::doWrite(INT32 fd)
 
 		if (sendLen < 0) {
 			INT32 iErrorNo = errno;
-			if (iErrorNo == EAGAIN) {		//ÖØÐÂ·¢
+			if (iErrorNo == EAGAIN) {		//ï¿½ï¿½ï¿½Â·ï¿½
 				break;
 			}
 			else if (iErrorNo == EWOULDBLOCK) {
 				break;
 			}
-			else if (iErrorNo == EINTR) {	//·¢ÍêÁË
+			else if (iErrorNo == EINTR) {	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				break;
 			}
 			else {

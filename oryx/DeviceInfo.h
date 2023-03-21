@@ -8,11 +8,12 @@
 using namespace std;
 
 enum DEVICE_TYPE {
-	DEVICE_UNKNOWN = 0,				//δ֪������
-	DEVICE_SERVER_INTERNAL = 1,		//�ڲ�������
-	DEVICE_SERVER_EXTERNAL = 2,		//�ⲿ������
-	DEVICE_CLIENT_INTERNAL = 3,		//�ڲ������豸
-	DEVICE_CLIENT_EXTERNAL = 4,		//�ⲿ�����豸
+	DEVICE_UNKNOWN = 0,				//未知服务器
+	DEVICE_SERVER_INTERNAL = 1,		//内部服务器
+	DEVICE_SERVER_EXTERNAL = 2,		//外部服务器
+	DEVICE_CLIENT_INTERNAL = 3,		//内部连接设备
+	DEVICE_CLIENT_EXTERNAL = 4,		//外部连接设备
+    DEVICE_MAX,
 };
 
 const INT32 MAX_RECV_BUFFER_LEN = 4096;
@@ -23,7 +24,7 @@ const INT32 MAX_SEND_BUFFER_LEN = 4096;
 struct DEVICE_INFO {
 	INT32 fd;
 	INT64 session_id;
-	DEVICE_TYPE  device_type;			//�豸����
+	DEVICE_TYPE  device_type;			//设备类型
 	char recv_buffer[MAX_RECV_BUFFER_LEN];
 	INT32 recv_begin;
 	INT32 recv_end;

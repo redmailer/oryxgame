@@ -33,7 +33,7 @@ bool sendData(int fd, char * data, int size) {
 
 bool sendProto(INT32 fd, INT32 messageID, INT32 errCode, ::google::protobuf::Message * proto) {
 	if (fd <= 0 /*|| proto == NULL || len <= 0*/) {
-		//TRACEERROR("sendProtoToSession failed,fd :%d", fd);
+		// TRACEDEBUG("sendProtoToSession failed,fd :%d", fd);
 		cout << "sendProtoToSession failed,fd :" << fd << endl;
 		return false;
 	}

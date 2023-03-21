@@ -8,10 +8,10 @@
 
 
 //spsc_queue
-//µ¥Éú²úÕßµ¥Ïû·ÑÕß ¶ÓÁÐ
-// pop/push Ö»ÄÜÔÚµ¥Ò»Ïß³ÌÖÐµ÷ÓÃ ,popºÍpush¿ÉÒÔÊÇÍ¬Ò»Ïß³Ì
+//å•ç”Ÿäº§è€…å•æ¶ˆè´¹è€… é˜Ÿåˆ—
+// pop/push åªèƒ½åœ¨å•ä¸€çº¿ç¨‹ä¸­è°ƒç”¨ ,popå’Œpushå¯ä»¥æ˜¯åŒä¸€çº¿ç¨‹
 
-//ÎªÁËÍ¬²½°²È«ºÍÐ§ÂÊ£¬½«ÎÞËø¶ÓÁÐµÄ³¤¶È¹Ì¶¨£¬²¢Ôö¼Ó»º´æ»úÖÆ¡£»º´æµÄÇåÀí±ØÐëÔÚ ²Ù×÷pushµÄÏß³ÌÖÐÊ¹ÓÃ
+//ä¸ºäº†åŒæ­¥å®‰å…¨å’Œæ•ˆçŽ‡ï¼Œå°†æ— é”é˜Ÿåˆ—çš„é•¿åº¦å›ºå®šï¼Œå¹¶å¢žåŠ ç¼“å­˜æœºåˆ¶ã€‚ç¼“å­˜çš„æ¸…ç†å¿…é¡»åœ¨ æ“ä½œpushçš„çº¿ç¨‹ä¸­ä½¿ç”¨
 
 template <class _T,INT32 size>
 struct spsc_queue {
